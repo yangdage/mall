@@ -86,9 +86,7 @@ export default {
   width: 100vw;
 }
 .el-aside {
-  /*background-color: #334761;*/
-  /*background-color: #EDF1FF;*/
-  background-color: #324054;
+  background-color: #2F4156;
 }
 .el-main {
   color: #333;

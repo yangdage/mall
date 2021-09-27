@@ -27,15 +27,12 @@ func (u *User) Login(param models.UserParam) int64 {
 
 func (u *User) Update(param models.UserParam) int64 {
 	user := User{
-		Id:     param.Id,
-		Role:   param.Role,
-		Status: param.Status,
+		Id:       param.Id,
+		Role:     param.Role,
+		Status:   param.Status,
+		Password: param.Password,
 	}
 	return global.Db.Model(&user).Updates(user).RowsAffected
-}
-
-func (u *User) ChangePwd(param models.UserParam) int64 {
-	return 1
 }
 
 func (u *User) Delete(id uint) int64 {

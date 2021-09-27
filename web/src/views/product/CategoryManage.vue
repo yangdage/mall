@@ -67,6 +67,7 @@
               <el-button
                   size="mini"
                   type="danger"
+                  v-if="scope.row.level === 1"
                   @click="deleteCategory(scope.$index, scope.row)">删除
               </el-button>
             </template>
@@ -193,6 +194,8 @@ export default {
       console.log(index, row);
       this.dialogFormVisible = true;
       this.dialogTitle = '修改类目';
+      this.category.name = row.name;
+      this.category.sort = row.sort;
       this.updateButton = true;
       this.createButton = false;
       this.category.id = row.id;
@@ -275,19 +278,13 @@ export default {
 
     // 删除
     deleteCategory(index, row) {
-      this.$axios.get('/category/delete', {
+      this.$axios.delete('/category/delete', {
         params: {
           id: row.id
         }
       }).then((response) => {
         if (response.data.code === 200) {
-          this.$message({
-            message: '删除成功',
-            type: 'success'
-          });
           this.queryList();
-        } else {
-          this.$message.error('删除失败');
         }
       }).catch((error) => {
         console.log(error);

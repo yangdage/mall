@@ -28,8 +28,8 @@
               prop="role"
               label="角色">
             <template #default="scope">
-              <el-tag size="mini" type="success" v-if="scope.row.role === 'ROLE_admin'">管理员</el-tag>
-              <el-tag size="mini" v-if="scope.row.role === '普通用户'">{{scope.row.role}}</el-tag>
+              <el-tag size="mini" type="success" v-if="scope.row.role === 'ADMIN'">管理员</el-tag>
+              <el-tag size="mini" v-if="scope.row.role === 'USER'">用户</el-tag>
             </template>
           </el-table-column>
           <el-table-column
@@ -37,7 +37,7 @@
               label="状态">
             <template #default="scope">
               <el-tag size="mini" type="success" v-if="scope.row.status === 1">正常</el-tag>
-              <el-tag size="mini" type="danger" v-if="scope.row.status === 0">停用</el-tag>
+              <el-tag size="mini" type="danger" v-if="scope.row.status === 2">停用</el-tag>
             </template>
           </el-table-column>
           <el-table-column
@@ -46,7 +46,7 @@
               width="180">
             <template #default="scope">
               <i class="el-icon-time"></i>
-              <span style="margin-left: 10px">{{ scope.row.createTime }}</span>
+              <span style="margin-left: 10px">{{ scope.row.created }}</span>
             </template>
           </el-table-column>
           <el-table-column label="操作" width="220">
@@ -67,8 +67,8 @@
         <el-dialog title="修改用户信息" v-model="dialogFormVisible" width="30%">
           <el-form :model="user">
             <el-form-item label="角色" :label-width="formLabelWidth">
-              <el-radio v-model="user.role" label="管理员">管理员</el-radio>
-              <el-radio v-model="user.role" label="普通用户">普通用户</el-radio>
+              <el-radio v-model="user.role" label="ADMIN">管理员</el-radio>
+              <el-radio v-model="user.role" label="USER">用户</el-radio>
             </el-form-item>
             <el-form-item label="状态" :label-width="formLabelWidth">
               <el-radio v-model="user.status" :label="value1">正常</el-radio>
@@ -94,14 +94,14 @@ export default {
     return {
       value: true,
       value1: 1,
-      value2: 0,
+      value2: 2,
       tableData: null,
       dialogFormVisible: false,
       formLabelWidth: '120px',
       user: {
+        id: '',
         role: '',
-        status: 0,
-        id: 0
+        status: '',
       }
     }
   },
@@ -127,8 +127,10 @@ export default {
       console.log(index,row);
     },
     updateUser() {
-      this.$axios.get("/user/update",{
-        params: this.user
+      this.$axios.put("/user/update",{
+        id: this.user.id,
+        role: this.user.role,
+        status: this.user.status
       }).then(response => {
         console.log(response);
         this.dialogFormVisible = false;
@@ -137,7 +139,7 @@ export default {
     },
     deleteUser(index, row) {
       console.log(index,row);
-      this.$axios.get("/user/delete",{
+      this.$axios.delete("/user/delete",{
         params: {
           id: row.id
         }

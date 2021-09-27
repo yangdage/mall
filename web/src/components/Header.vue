@@ -49,7 +49,6 @@ export default {
 <style scoped>
 .el-header {
   background-color: white;
-  color: #333;
   box-shadow: 0 0px 5px 0 rgba(0, 0, 0, 0.1);
 }
 .button-1{

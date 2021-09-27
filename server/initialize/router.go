@@ -57,7 +57,6 @@ func Router() {
 	// 用户管理API
 	engine.DELETE("/user/delete", api.DeleteUser)
 	engine.PUT("/user/update", api.UpdateUser)
-	engine.POST("/user/pwd/change", api.ChangePassword)
 	engine.GET("/user/list", api.GetUserList)
 
 	// 启动、监听端口

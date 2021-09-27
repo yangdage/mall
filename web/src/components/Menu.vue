@@ -80,7 +80,7 @@ export default {
               title: '用户列表',
             },
             {
-              name: '/change/password',
+              name: '/reset/password',
               icon: 'el-icon-lock',
               title: '修改密码',
             }
@@ -121,7 +121,8 @@ export default {
   color: #fff;
 }
 .menu-item-back{
-  background-color: #3e4b5e;
+  /*background-color: #3e4b5e;*/
+  background-color: #222D3C;
 }
 </style>
 <style>

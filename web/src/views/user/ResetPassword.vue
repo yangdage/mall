@@ -3,9 +3,6 @@
     <el-col :span="10" :offset="7">
       <el-card shadow="never" style="margin-top: 100px;">
         <el-form style="width: 450px;" :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="80px" class="demo-ruleForm">
-          <el-form-item label="旧密码" prop="oldPass">
-            <el-input v-model="ruleForm.oldPass" style="width: 80%;"></el-input>
-          </el-form-item>
           <el-form-item label="新密码" prop="newPass">
             <el-input type="password" v-model="ruleForm.newPass" style="width: 80%;" autocomplete="off"></el-input>
           </el-form-item>
@@ -23,15 +20,9 @@
 </template>
 
 <script>
-import qs from 'qs'
 export default {
-  name: "ChangePassword",
+  name: "ResetPassword",
   data() {
-    let validatePass0 = (rule, value, callback) => {
-      if (!value) {
-        return callback(new Error('原密码不能为空'));
-      }
-    };
     let validatePass1 = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('请输入密码'));
@@ -53,14 +44,10 @@ export default {
     };
     return {
       ruleForm: {
-        oldPass: '',
         newPass: '',
         checkPass: ''
       },
       rules: {
-        oldPass: [
-          { validator: validatePass0, required: true, trigger: 'blur' }
-        ],
         newPass: [
           { validator: validatePass1, required: true, trigger: 'blur' }
         ],
@@ -75,15 +62,11 @@ export default {
       console.log(formName)
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$axios.post('/user/pass?' + qs.stringify({
-            oldPass: this.ruleForm.oldPass,
-            newPass: this.ruleForm.newPass
-          })).then(response => {
+          this.$axios.put('/user/update', {
+            id: 100030,
+            password: this.ruleForm.newPass
+          }).then(response => {
             console.log(response);
-            this.$message({
-              message: response.data.message,
-              type: 'success'
-            });
           })
         } else {
           console.log('error submit!!');

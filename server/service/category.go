@@ -38,7 +38,10 @@ func (c *Category) Create(param models.CategoryParam) uint {
 
 // Delete 删除类目
 func (c *Category) Delete(id uint) int64 {
-	return global.Db.Delete(&Category{}, id).RowsAffected
+	var pid2, pid3 Category
+	global.Db.Where("parent_id = ?", id).First(&pid2)
+	global.Db.Where("parent_id = ?", pid2.Id).First(&pid3)
+	return global.Db.Delete(&Category{}, []uint{id, pid2.Id, pid3.Id}).RowsAffected
 }
 
 // Update 更新类目
@@ -75,14 +78,16 @@ func (c *Category) GetOption() (option []models.CategoryOption) {
 // 获取树形结构的选项
 func getTreeOptions(id uint, cateList []models.CategoryList) (option []models.CategoryOption) {
 	optionList := make([]models.CategoryOption, 0)
-	for _ , opt := range cateList {
+	for _, opt := range cateList {
 		if opt.ParentId == id && (opt.Level == 1 || opt.Level == 2 || opt.Level == 3) {
 			option := models.CategoryOption{
 				Value:    opt.Id,
 				Label:    opt.Name,
 				Children: getTreeOptions(opt.Id, cateList),
 			}
-			if opt.Level == 3 { option.Children = nil }
+			if opt.Level == 3 {
+				option.Children = nil
+			}
 			optionList = append(optionList, option)
 		}
 	}

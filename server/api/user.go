@@ -12,7 +12,7 @@ var user service.User
 
 func GetCaptcha(c *gin.Context) {
 	id, b64s, _ := common.GenerateCaptcha()
-	data := map[string]interface{}{ "captchaId": id, "captchaImg": b64s}
+	data := map[string]interface{}{"captchaId": id, "captchaImg": b64s}
 	response.Success("操作成功", data, c)
 }
 
@@ -28,7 +28,7 @@ func UserLogin(c *gin.Context) {
 	// 生成token
 	if user.Login(param) > 0 {
 		token, _ := common.GenerateToke(param.Username)
-		res := map[string]interface{}{ "token": token}
+		res := map[string]interface{}{"token": token}
 		response.Success("登录成功", res, c)
 		return
 	}
@@ -41,18 +41,9 @@ func UpdateUser(c *gin.Context) {
 	count := user.Update(param)
 	if count > 0 {
 		response.Success("更新成功", count, c)
+		return
 	}
 	response.Failed("更新失败", c)
-}
-
-func ChangePassword(c *gin.Context) {
-	var param models.UserParam
-	_ = c.ShouldBindJSON(&param)
-	count := user.ChangePwd(param)
-	if count > 0{
-		response.Success("密码更新成功", count, c)
-	}
-	response.Failed("密码更新失败", c)
 }
 
 func DeleteUser(c *gin.Context) {
@@ -61,6 +52,7 @@ func DeleteUser(c *gin.Context) {
 	count := user.Delete(key.Id)
 	if count > 0 {
 		response.Success("删除成功", count, c)
+		return
 	}
 	response.Failed("删除失败", c)
 }
@@ -71,4 +63,3 @@ func GetUserList(c *gin.Context) {
 	userList := user.GetList(page)
 	response.Success("操作成功", userList, c)
 }
-
