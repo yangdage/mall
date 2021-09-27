@@ -108,8 +108,8 @@
               label="状态"
               width="70">
             <template #default="scope">
-              <el-tag size="mini" v-if="scope.row.status === 1" type="primary">已上架</el-tag>
-              <el-tag size="mini" v-if="scope.row.status === 0" type="success">仓库中</el-tag>
+              <el-tag size="mini" v-if="scope.row.status === 2" type="primary">已上架</el-tag>
+              <el-tag size="mini" v-if="scope.row.status === 1" type="success">仓库中</el-tag>
             </template>
           </el-table-column>
           <el-table-column
@@ -135,13 +135,13 @@
               </el-button>
               <el-button
                   size="mini"
-                  v-if="scope.row.status === 0"
+                  v-if="scope.row.status === 1"
                   @click="upProduct(scope.$index, scope.row)"
                   type="text">上架
               </el-button>
               <el-button
                   size="mini"
-                  v-if="scope.row.status === 1"
+                  v-if="scope.row.status === 2"
                   @click="downProduct(scope.$index, scope.row)"
                   type="text">下架
               </el-button>
@@ -270,11 +270,9 @@ export default {
       });
     },
     upProduct(index, row) {
-      this.$axios.get('/product/update', {
-        params: {
-          id: row.id,
-          status: 1
-        }
+      this.$axios.put('/product/update', {
+        id: row.id,
+        status: 2
       }).then((response) => {
         if (response.data.code === 200){
           this.selectGoodsList();
@@ -284,11 +282,9 @@ export default {
       })
     },
     downProduct(index, row) {
-      this.$axios.get('/product/update', {
-        params: {
-          id: row.id,
-          status: 0
-        }
+      this.$axios.put('/product/update', {
+        id: row.id,
+        status: 1
       }).then((response) => {
         if (response.data.code === 200){
           this.selectGoodsList();

@@ -71,7 +71,7 @@ func (p *Product) Update(param models.ProductParam) int64 {
 		Status:         param.Status,
 		Updated:        common.NowTime(),
 	}
-	return global.Db.Model(&product).Where("id = ?", param.Id).Updates(product).RowsAffected
+	return global.Db.Model(&product).Updates(product).RowsAffected
 }
 
 // GetInfo 获取商品信息

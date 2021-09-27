@@ -8,7 +8,7 @@ import (
 
 // LoadConfig 加载配置文件
 func LoadConfig() {
-	viper.AddConfigPath("./server/")
+	viper.AddConfigPath("./")
 	viper.SetConfigName("config")
 	viper.SetConfigType("yaml")
 	if err := viper.ReadInConfig(); err != nil {

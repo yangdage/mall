@@ -36,12 +36,12 @@
               <el-input v-model="product.name" maxlength="20" style="width: 60%;" show-word-limit></el-input>
             </el-form-item>
             <el-form-item label="售价" label-width="100px">
-              <el-input v-model="product.price" style="width: 30%;">
+              <el-input v-model.number="product.price" style="width: 30%;">
                 <template #append>元</template>
               </el-input>
             </el-form-item>
             <el-form-item label="库存" label-width="100px">
-              <el-input v-model="product.amount" style="width: 30%;">
+              <el-input v-model.number="product.amount" style="width: 30%;">
                 <template #append>件</template>
               </el-input>
             </el-form-item>
@@ -238,8 +238,9 @@ export default {
         salesServiceStr = salesServiceStr + this.product.salesService[i] + ',';
       }
       console.log("VVVVVV" + this.$route.params.id)
+      let pid = this.$route.params.id.toString()
       this.$axios.put('/product/update', {
-        id: this.$route.params.id,
+        id: parseInt(pid),
         categoryId: this.product.categoryId,
         kind:  this.product.kind,
         title:  this.product.title,
