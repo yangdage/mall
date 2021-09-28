@@ -6,16 +6,17 @@
     <el-container style="display: block;">
       <Header />
       <el-main class="el-main">
-        <el-tabs v-model="editableTabsValue" type="card" closable @tab-remove="removeTab" @tab-click="clickTab">
-          <el-tab-pane
-              v-for="(item) in editableTabs"
-              :key="item.name"
-              :label="item.title"
-              :name="item.name"
-          >
-            <router-view />
-          </el-tab-pane>
-        </el-tabs>
+        <router-view />
+<!--        <el-tabs v-model="editableTabsValue" type="card" closable @tab-remove="removeTab" @tab-click="clickTab">-->
+<!--          <el-tab-pane-->
+<!--              v-for="(item) in editableTabs"-->
+<!--              :key="item.name"-->
+<!--              :label="item.title"-->
+<!--              :name="item.name"-->
+<!--          >-->
+<!--            -->
+<!--          </el-tab-pane>-->
+<!--        </el-tabs>-->
       </el-main>
     </el-container>
   </el-container>

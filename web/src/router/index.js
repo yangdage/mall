@@ -1,4 +1,4 @@
-import { createWebHashHistory, createRouter } from 'vue-router';
+import {createRouter, createWebHashHistory} from 'vue-router';
 import Login from "../views/Login";
 import OrderList from "../views/order/OrderList";
 import AddProduct from "../views/product/AddProduct";
@@ -12,16 +12,23 @@ import OrderDetail from "../views/order/OrderDetail";
 import EditProduct from "../views/product/EditProduct";
 import RefundProcess from "../views/order/RefundProcess";
 import ResetPassword from "../views/user/ResetPassword";
+import MainPage from "../views/index/MainPage";
 
 const routes = [
     {
         path: '/',
         component: Login,
     },
-    {   path: '/home',
+    {
+        path: '/home',
         component: Home,
-        redirect: '/product/list',
+        redirect: '/main/page',
         children: [
+            {
+                path: '/main/page',
+                name: 'mainPage',
+                component: MainPage,
+            },
             {
                 path: '/product/list',
                 name: 'productList',

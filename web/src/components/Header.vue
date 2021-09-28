@@ -1,7 +1,16 @@
 <template>
   <el-header class="el-header">
     <el-row>
-      <el-col :span="1" :offset="21">
+      <el-col :span="21">
+        <div style="margin-top: 24px;">
+        <el-breadcrumb separator-class="el-icon-arrow-right">
+          <el-breadcrumb-item :to="{ path: '/main/page' }">首页</el-breadcrumb-item>
+          <el-breadcrumb-item :to="navName1">{{navTitle1}}</el-breadcrumb-item>
+          <el-breadcrumb-item v-if="navTitle2 !== ''">{{navTitle2}}</el-breadcrumb-item>
+        </el-breadcrumb>
+        </div>
+      </el-col>
+      <el-col :span="1">
         <el-button type="text" class="el-icon-full-screen button-1" />
       </el-col>
       <el-col :span="1">
@@ -32,6 +41,32 @@ export default {
     return {
       avatar: {
         url: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png'
+      },
+    }
+  },
+  computed: {
+    navTitle1: {
+      get() {
+        return this.$store.state.navigation.title
+      },
+      set(val) {
+        this.$store.state.navigation.title = val
+      }
+    },
+    navName1: {
+      get() {
+        return this.$store.state.navigation.path
+      },
+      set(val) {
+        this.$store.state.navigation.path = val
+      }
+    },
+    navTitle2: {
+      get() {
+        return this.$store.state.navigation.afterName
+      },
+      set(val) {
+        this.$store.state.navigation.afterName = val
       }
     }
   },
@@ -49,7 +84,6 @@ export default {
 <style scoped>
 .el-header {
   background-color: white;
-  box-shadow: 0 0px 5px 0 rgba(0, 0, 0, 0.1);
 }
 .button-1{
   font-size: 22px;

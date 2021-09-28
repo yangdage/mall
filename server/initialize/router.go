@@ -59,6 +59,9 @@ func Router() {
 	engine.PUT("/user/update", api.UpdateUser)
 	engine.GET("/user/list", api.GetUserList)
 
+	// 数据统计API
+	engine.GET("/statistics/info", api.GetStatisticsInfo)
+
 	// 启动、监听端口
 	post := ":" + global.Config.Server.Post
 	_ = engine.Run(post)

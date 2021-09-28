@@ -15,6 +15,7 @@ html, body, #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   background-color: #f0f3f6;
   height: 100%;
+  width: 100%;
   padding: 0;
   margin: 0;
   font-size: 15px;

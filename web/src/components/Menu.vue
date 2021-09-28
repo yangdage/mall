@@ -1,16 +1,20 @@
 <template>
-  <el-menu :default-active="Index"
+  <el-menu default-active="/main/page"
            :uniqueOpened="true"
            :style=" { width: '200px' } "
            background-color="#324054"
            text-color="#F3F3F4" router>
+    <el-menu-item index="/main/page" @click="selectMenu({title: '首页'}, {path: '',afterName: ''})">
+      <i class="el-icon-s-home menu-icon"></i>
+      <span>首页</span>
+    </el-menu-item>
     <el-submenu :index="menu.name" v-for="menu in menuList" :key="menu.title">
       <template #title>
         <i :class="menu.icon" class="menu-icon"></i>
         <span>{{menu.title}}</span>
       </template>
       <div class="menu-item-back">
-        <el-menu-item :index="item.name" v-for="item in menu.children" :key="item.name" @click="selectMenu(item)">
+        <el-menu-item :index="item.name" v-for="item in menu.children" :key="item.name" @click="selectMenu(menu, item)">
             <i :class="item.icon" class="menu-icon"></i>
             <span slot="title">{{item.title}}</span>
         </el-menu-item>
@@ -26,26 +30,30 @@ export default {
     return {
       menuList: [
         {
-          name: '2',
+          name: '/product/list',
           icon: 'el-icon-s-goods',
           title: '商品',
           children: [
             {
+              submenu: 2,
               name: '/product/list',
               icon: 'el-icon-goods',
               title: '商品列表',
             },
             {
+              submenu: 2,
               name: '/product/add',
               icon: 'el-icon-circle-plus-outline',
               title: '添加商品',
             },
             {
+              submenu: 2,
               name: '/product/category',
               icon: 'el-icon-price-tag',
               title: '类目管理',
             },
             {
+              submenu: 2,
               name: '/product/brand',
               icon: 'el-icon-price-tag',
               title: '品牌管理',
@@ -105,11 +113,41 @@ export default {
       set(val) {
         this.$store.state.editableTabsValue = val
       }
-    }
+    },
   },
   methods: {
-    selectMenu(item) {
+    selectMenu(menu, item) {
       this.$store.commit("addTab", item)
+      let newItem;
+      if (menu.title === '首页'){
+        newItem = {
+          title: '首页',
+          path: '',
+          afterName: ''
+        }
+      }
+      if (menu.title === '商品'){
+        newItem = {
+          title: menu.title,
+          path: menu.name,
+          afterName: item.title
+        }
+      }
+      if (menu.title === '订单'){
+        newItem = {
+          title: menu.title,
+          path: menu.name,
+          afterName: item.title
+        }
+      }
+      if (menu.title === '用户'){
+        newItem = {
+          title: menu.title,
+          path: menu.name,
+          afterName: item.title
+        }
+      }
+      this.$store.commit("addNav", newItem)
     }
   }
 }
@@ -121,7 +159,6 @@ export default {
   color: #fff;
 }
 .menu-item-back{
-  /*background-color: #3e4b5e;*/
   background-color: #222D3C;
 }
 </style>
@@ -131,9 +168,8 @@ export default {
   color: #ecebeb;
 }
 .el-menu-item.is-active {
-  background-color: #409eff !important;
+  background-color: #409EFF !important;
   color: #fff;
-  border-radius: 3px;
 }
 .el-submenu__title:hover {
   background: none !important;
