@@ -1,24 +1,71 @@
 package service
 
 import (
+	"context"
 	"mall.com/common"
 	"mall.com/global"
 	"mall.com/models"
 	"strconv"
 	"strings"
+	"time"
 )
 
 type Order struct {
 	Id            uint    `gorm:"primaryKey"`
-	PaymentStatus int     `gorm:"PaymentStatus"`
 	ProductItem   string  `gorm:"ProductItem"`
 	TotalPrice    float64 `gorm:"TotalPrice"`
 	Status        string  `gorm:"Status"`
 	AddressId     uint    `gorm:"AddressId"`
-	UserId        string  `gorm:"UserId"`
+	UserId        uint    `gorm:"UserId"`
 	AdminId       uint    `gorm:"AdminId"`
 	Created       string  `gorm:"Created"`
 	Updated       string  `gorm:"Updated"`
+}
+
+var ctx = context.Background()
+
+func (o *Order) Create(param models.OrderParam) int64 {
+	order := Order{
+		ProductItem: param.ProductItem,
+		TotalPrice: param.TotalPrice,
+		Status: param.Status,
+		AddressId: param.AddressId,
+		UserId: param.UserId,
+		AdminId: param.AdminId,
+		Created: common.NowTime(),
+	}
+	rows := global.Db.Create(&order).RowsAffected
+	if rows > 0 {
+		aid := strconv.Itoa(int(param.AdminId))
+		var key string
+		switch time.Now().Weekday() {
+		case time.Monday:
+			key = "statistics:" + aid + ":monday"
+		case time.Tuesday:
+			key = "statistics:" + aid + ":tuesday"
+		case time.Wednesday:
+			key = "statistics:" + aid + ":wednesday"
+		case time.Thursday:
+			key = "statistics:" + aid + ":thursday"
+		case time.Friday:
+			key = "statistics:" + aid + ":friday"
+		case time.Saturday:
+			key = "statistics:" + aid + ":saturday"
+		case time.Sunday:
+			key = "statistics:" + aid + ":sunday"
+		default:
+		}
+		if err := global.RDb.HGet(ctx, key, "amount").Err(); err != nil {
+			m := map[string]interface{}{"orders": 1, "amount": param.TotalPrice}
+			global.RDb.HMSet(ctx, key, m)
+			global.RDb.Expire(ctx, key, time.Hour*24*7)
+			return rows
+		}
+		global.RDb.HIncrBy(ctx, key, "orders", 1)
+		global.RDb.HIncrByFloat(ctx, key, "amount", param.TotalPrice)
+		return rows
+	}
+	return rows
 }
 
 // Delete 删除订单
@@ -67,7 +114,6 @@ func (o *Order) GetDetail(orderId uint) (od models.OrderDetail) {
 	orderDetail := models.OrderDetail{
 		Id:              order.Id,
 		Created:         order.Created,
-		PaymentStatus:   order.PaymentStatus,
 		Status:          order.Status,
 		Name:            address.Name,
 		Mobile:          address.Mobile,

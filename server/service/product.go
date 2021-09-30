@@ -89,6 +89,7 @@ func (p *Product) GetList(page models.Page, param models.ProductParam) ([]models
 		Title:      param.Title,
 		BrandId:    param.BrandId,
 		Status:     param.Status,
+		CreatorId:  param.CreatorId,
 	}
 	productList := make([]models.ProductList, 0)
 	rows := common.RestPage(page, "product", query, &productList, &[]Product{})

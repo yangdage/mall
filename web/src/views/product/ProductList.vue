@@ -1,5 +1,5 @@
 <template>
-  <el-main>
+  <div>
     <el-card shadow="never" class="card-box">
       <el-form ref="query" :model="query" label-width="80px">
         <el-row :gutter="12">
@@ -158,7 +158,7 @@
           :total="total">
       </el-pagination>
     </el-card>
-  </el-main>
+  </div>
 </template>
 
 <script>
@@ -240,7 +240,7 @@ export default {
           id: this.query.productId,
           categoryId: this.query.productKind,
           brandId: this.query.productBrand,
-          creatorId: localStorage.getItem("USER_ID"),
+          creatorId: localStorage.getItem("uid"),
           status: this.query.productState
         }
       }).then((response) => {

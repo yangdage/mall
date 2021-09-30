@@ -17,12 +17,14 @@ type User struct {
 	Updated  string `gorm:"updated"`
 }
 
-func (u *User) Login(param models.UserParam) int64 {
+func (u *User) Login(param models.UserParam) uint {
+	var user User
 	query := map[string]interface{}{
 		"username": param.Username,
 		"password": param.Password,
 	}
-	return global.Db.Where(query).First(&User{}).RowsAffected
+	global.Db.Where(query).First(&user)
+	return user.Id
 }
 
 func (u *User) Update(param models.UserParam) int64 {

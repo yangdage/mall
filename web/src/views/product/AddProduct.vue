@@ -218,7 +218,7 @@ export default {
         sendAddress: this.product.sendAddress,
         parcelType: this.product.parcelType,
         salesService: salesServiceStr,
-        creatorId: localStorage.getItem('USER_ID'),
+        creatorId: localStorage.getItem('uid'),
         status: status
       }).then((response) => {
         if (response.data.code === 200){

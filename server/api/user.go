@@ -26,9 +26,10 @@ func UserLogin(c *gin.Context) {
 		return
 	}
 	// 生成token
-	if user.Login(param) > 0 {
+	uid := user.Login(param)
+	if  uid > 0 {
 		token, _ := common.GenerateToke(param.Username)
-		res := map[string]interface{}{"token": token}
+		res := map[string]interface{}{"token": token, "uid": uid}
 		response.Success("登录成功", res, c)
 		return
 	}

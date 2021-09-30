@@ -9,6 +9,12 @@ import (
 
 var order service.Order
 
+func CreateOrder(c *gin.Context) {
+	var param models.OrderParam
+	_ = c.ShouldBindJSON(param)
+	order.Create(param)
+}
+
 // DeleteOrder 删除订单
 func DeleteOrder(c *gin.Context) {
 	var key models.PrimaryKey

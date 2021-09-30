@@ -5,7 +5,6 @@ type OrderDetail struct {
 	// 订单信息
 	Id            uint   `json:"id"`
 	Created       string `json:"created"`
-	PaymentStatus int    `json:"paymentStatus"`
 	Status        string `json:"status"`
 
 	// 地址信息

@@ -3,20 +3,10 @@
     <el-aside width="200px" class="el-aside">
       <Menu />
     </el-aside>
-    <el-container style="display: block;">
+    <el-container style="display: inline-block;">
       <Header />
       <el-main class="el-main">
         <router-view />
-<!--        <el-tabs v-model="editableTabsValue" type="card" closable @tab-remove="removeTab" @tab-click="clickTab">-->
-<!--          <el-tab-pane-->
-<!--              v-for="(item) in editableTabs"-->
-<!--              :key="item.name"-->
-<!--              :label="item.title"-->
-<!--              :name="item.name"-->
-<!--          >-->
-<!--            -->
-<!--          </el-tab-pane>-->
-<!--        </el-tabs>-->
       </el-main>
     </el-container>
   </el-container>

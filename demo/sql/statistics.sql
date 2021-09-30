@@ -11,7 +11,7 @@
  Target Server Version : 80016
  File Encoding         : 65001
 
- Date: 28/09/2021 18:39:51
+ Date: 30/09/2021 21:18:19
 */
 
 SET NAMES utf8mb4;
@@ -27,6 +27,7 @@ CREATE TABLE `statistics` (
   `order_count` int(10) DEFAULT NULL COMMENT '订单数',
   `amount` decimal(20,0) DEFAULT NULL COMMENT '交易金额',
   `visitor_count` int(10) DEFAULT NULL COMMENT '访客数',
+  `admin_id` bigint(10) DEFAULT NULL COMMENT '管理员id',
   `created` char(30) DEFAULT NULL COMMENT '创建时间',
   `updated` char(30) DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`)
@@ -36,7 +37,7 @@ CREATE TABLE `statistics` (
 -- Records of statistics
 -- ----------------------------
 BEGIN;
-INSERT INTO `statistics` VALUES (101, 305, 86, 5890, 2030, NULL, NULL);
+INSERT INTO `statistics` VALUES (101, 305, 86, 5890, 2030, 100030, NULL, NULL);
 COMMIT;
 
 SET FOREIGN_KEY_CHECKS = 1;

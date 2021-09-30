@@ -48,13 +48,20 @@
     </el-col>
   </el-row>
   </div>
-  <div>
-    <el-empty class="empty" description="暂无数据"></el-empty>
+  <div class="card-container1">
+    <el-row :span="24">
+      <el-col :span="24">
+        <el-card shadow="never" style="border: none;">
+          <div id="main" :style="{with: '100%', height: '360px'}"></div>
+        </el-card>
+      </el-col>
+    </el-row>
   </div>
   </div>
 </template>
 
 <script>
+import * as echarts from 'echarts';
 export default {
   name: "MainPage",
   data() {
@@ -64,24 +71,103 @@ export default {
         orderCount: '',
         amount: '',
         visitorCount: ''
-      }
+      },
     }
   },
   mounted() {
-    this.getInfo()
-  },
-  methods: {
-    getInfo() {
-      this.$axios.get("/statistics/info").then(response => {
-        if (response.data.code === 200){
-          let res = response.data.data;
-          this.statistics.goodsCount = res.goodsCount;
-          this.statistics.orderCount = res.orderCount;
-          this.statistics.amount = res.amount;
-          this.statistics.visitorCount = res.visitorCount;
+    // 获取商品数、订单量、交易金额、访客数
+    this.$axios.get("/statistics/info", {
+      params: {
+        id: localStorage.getItem("uid")
+      }
+    }).then(response => {
+      if (response.data.code === 200){
+        let res = response.data.data;
+        this.statistics.goodsCount = res.goodsCount;
+        this.statistics.orderCount = res.orderCount;
+        this.statistics.amount = res.amount;
+        this.statistics.visitorCount = res.visitorCount;
+        if (res.goodsCount === 0 || res.orderCount === 0 || res.amount === 0 || res.visitorCount === 0) {
+          this.statistics.goodsCount = '__';
+          this.statistics.orderCount = '--';
+          this.statistics.amount = '--';
+          this.statistics.visitorCount = '--';
         }
-      })
-    }
+      }
+    })
+
+    this.$axios.get("/week/info", {
+      params: {
+        id: localStorage.getItem("uid")
+      }
+    }).then(response => {
+      if (response.data.code === 200){
+        let res = response.data.data;
+        let option = {
+          tooltip: {
+            trigger: 'axis',
+                axisPointer: {
+              type: 'cross',
+                  label: {
+                backgroundColor: '#6a7985'
+              }
+            }
+          },
+          legend: {
+            data: ['订单量', '销售额']
+          },
+          toolbox: {
+            feature: {
+              saveAsImage: {}
+            }
+          },
+          grid: {
+            left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+          },
+          xAxis: [
+            {
+              type: 'category',
+              boundaryGap: false,
+              data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+            }
+          ],
+              yAxis: [
+            {
+              type: 'value'
+            }
+          ],
+              series: [
+            {
+              name: '订单量',
+              type: 'line',
+              stack: 'Total',
+              areaStyle: {},
+              emphasis: {
+                focus: 'series'
+              },
+              data: res.orders
+            },
+            {
+              name: '销售额',
+              type: 'line',
+              stack: 'Total',
+              areaStyle: {},
+              emphasis: {
+                focus: 'series'
+              },
+              data: res.amount
+            }
+          ]
+        }
+
+        let chartDom = document.getElementById('main');
+        let myChart = echarts.init(chartDom);
+        option && myChart.setOption(option);
+      }
+    })
   }
 }
 </script>
@@ -91,6 +177,11 @@ export default {
   border: none;
   background-color: #f0f3f6;
   padding: 30px;
+}
+.card-container1{
+  border: none;
+  background-color: white;
+  padding: 20px;
 }
 .card-img{
   width: 60px;
@@ -106,8 +197,5 @@ export default {
   font-weight: 500;
   padding-left: 10px;
   padding-top: 8px;
-}
-.empty{
-  margin-top: 100px;
 }
 </style>
