@@ -11,7 +11,6 @@ export default {
   name: "ResultPage",
   mounted() {
     this.title = this.$route.params.title
-    console.log("AAAAa" + this.$route.params.title)
   },
   computed: {
     title: {

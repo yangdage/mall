@@ -1,12 +1,12 @@
 <template>
   <el-container class="el-container">
     <el-aside width="200px" class="el-aside">
-      <Menu />
+      <Menu/>
     </el-aside>
     <el-container style="display: inline-block;">
-      <Header />
+      <Header/>
       <el-main class="el-main">
-        <router-view />
+        <router-view/>
       </el-main>
     </el-container>
   </el-container>
@@ -15,58 +15,12 @@
 <script>
 import Menu from "../components/Menu";
 import Header from "../components/Header";
+
 export default {
   name: "Home",
   components: {Header, Menu},
   data() {
-    return {
-
-    }
-  },
-  computed: {
-    editableTabs: {
-      get() {
-        return this.$store.state.editableTabs
-      },
-      set(val) {
-        this.$store.state.editableTabs = val
-      }
-    },
-    editableTabsValue: {
-      get() {
-        return this.$store.state.editableTabsValue
-      },
-      set(val) {
-        this.$store.state.editableTabsValue = val
-      }
-    }
-  },
-  methods: {
-    removeTab(targetName) {
-      let tabs = this.editableTabs;
-      console.log(tabs + "AAAA")
-      let activeName = this.editableTabsValue;
-      if (activeName === 'Index') {
-        return
-      }
-      if (activeName === targetName) {
-        tabs.forEach((tab, index) => {
-          if (tab.name === targetName) {
-            let nextTab = tabs[index + 1] || tabs[index - 1];
-            if (nextTab) {
-              activeName = nextTab.name;
-            }
-          }
-        });
-      }
-      this.editableTabsValue = activeName;
-      this.editableTabs = tabs.filter(tab => tab.name !== targetName);
-      this.$router.push({path: this.$store.state.editableTabsValue})
-    },
-    clickTab(targetName) {
-      console.log(targetName)
-      this.$router.push({path: this.$store.state.editableTabsValue})
-    }
+    return {}
   }
 }
 </script>
@@ -81,7 +35,7 @@ export default {
 }
 .el-main {
   color: #333;
-  height: 90%;
+  height: 91.5%;
   padding: 0;
   background-color: white;
 }

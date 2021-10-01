@@ -9,19 +9,10 @@ import (
 
 var statistics service.Statistics
 
-// GetStatisticsInfo 获取统计信息
+// GetStatisticsInfo 获取统计信息（商品数、订单量、交易金额）
 func GetStatisticsInfo(c *gin.Context) {
 	var key models.PrimaryKey
 	_ = c.Bind(&key)
-	info := statistics.GetInfo(key.Id)
+	info := statistics.GetStatisticsInfo(key.Id)
 	response.Success("操作成功", info, c)
-}
-
-// GetWeekInfo 获取本周信息
-func GetWeekInfo(c *gin.Context) {
-	var key models.PrimaryKey
-	_ = c.Bind(&key)
-	weekOrders,weekAmount := statistics.GetWeekInfo(key.Id)
-	weekInfo := map[string]interface{}{"orders": weekOrders, "amount": weekAmount}
-	response.Success("操作成功", weekInfo, c)
 }

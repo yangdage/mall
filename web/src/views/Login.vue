@@ -96,8 +96,6 @@ export default {
           }).then((response) => {
             localStorage.setItem("token", response.data.data.token)
             localStorage.setItem("uid", response.data.data.uid)
-            this.$store.commit('SET_TOKEN', response.data.data.token)
-            console.log(response.data.data.token)
             this.$router.push('/home');
           }).catch((error) => { console.log(error); })
         }

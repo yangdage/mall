@@ -9,12 +9,6 @@ import (
 
 var order service.Order
 
-func CreateOrder(c *gin.Context) {
-	var param models.OrderParam
-	_ = c.ShouldBindJSON(param)
-	order.Create(param)
-}
-
 // DeleteOrder 删除订单
 func DeleteOrder(c *gin.Context) {
 	var key models.PrimaryKey
@@ -29,10 +23,11 @@ func DeleteOrder(c *gin.Context) {
 // UpdateOrder 更新订单
 func UpdateOrder(c *gin.Context) {
 	var param models.OrderParam
-	_ = c.ShouldBindJSON(param)
+	_ = c.ShouldBindJSON(&param)
 	count := order.Update(param)
 	if count > 0 {
 		response.Success("更新成功", count, c)
+		return
 	}
 	response.Failed("更新失败", c)
 }
@@ -40,8 +35,10 @@ func UpdateOrder(c *gin.Context) {
 // GetOrderList 获取订单列表
 func GetOrderList(c *gin.Context) {
 	var page models.Page
+	var param models.OrderParam
 	_ = c.Bind(&page)
-	orderList, row := order.GetList(page)
+	_ = c.Bind(&param)
+	orderList, row := order.GetList(page, param)
 	response.SuccessPage("操作成功", orderList, row, c)
 }
 

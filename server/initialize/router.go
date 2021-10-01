@@ -11,12 +11,8 @@ func Router() {
 
 	engine := gin.Default()
 
-	// 开启跨域、JWT认证
+	// 开启跨域
 	engine.Use(middleware.Cors())
-
-	engine.POST("/order/create", api.CreateOrder)
-	engine.GET("/week/info", api.GetWeekInfo)
-
 
 	// 静态资源请求映射
 	engine.Static("/image", global.Config.Upload.SavePath)

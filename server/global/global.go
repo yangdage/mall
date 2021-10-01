@@ -1,7 +1,6 @@
 package global
 
 import (
-	"github.com/go-redis/redis/v8"
 	"gorm.io/gorm"
 	"mall.com/config"
 )
@@ -9,5 +8,4 @@ import (
 var (
 	Config config.Config
 	Db     *gorm.DB
-	RDb    *redis.Client
 )

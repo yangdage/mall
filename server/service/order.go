@@ -1,71 +1,26 @@
 package service
 
 import (
-	"context"
 	"mall.com/common"
 	"mall.com/global"
 	"mall.com/models"
 	"strconv"
 	"strings"
-	"time"
 )
 
 type Order struct {
-	Id            uint    `gorm:"primaryKey"`
-	ProductItem   string  `gorm:"ProductItem"`
-	TotalPrice    float64 `gorm:"TotalPrice"`
-	Status        string  `gorm:"Status"`
-	AddressId     uint    `gorm:"AddressId"`
-	UserId        uint    `gorm:"UserId"`
-	AdminId       uint    `gorm:"AdminId"`
-	Created       string  `gorm:"Created"`
-	Updated       string  `gorm:"Updated"`
-}
-
-var ctx = context.Background()
-
-func (o *Order) Create(param models.OrderParam) int64 {
-	order := Order{
-		ProductItem: param.ProductItem,
-		TotalPrice: param.TotalPrice,
-		Status: param.Status,
-		AddressId: param.AddressId,
-		UserId: param.UserId,
-		AdminId: param.AdminId,
-		Created: common.NowTime(),
-	}
-	rows := global.Db.Create(&order).RowsAffected
-	if rows > 0 {
-		aid := strconv.Itoa(int(param.AdminId))
-		var key string
-		switch time.Now().Weekday() {
-		case time.Monday:
-			key = "statistics:" + aid + ":monday"
-		case time.Tuesday:
-			key = "statistics:" + aid + ":tuesday"
-		case time.Wednesday:
-			key = "statistics:" + aid + ":wednesday"
-		case time.Thursday:
-			key = "statistics:" + aid + ":thursday"
-		case time.Friday:
-			key = "statistics:" + aid + ":friday"
-		case time.Saturday:
-			key = "statistics:" + aid + ":saturday"
-		case time.Sunday:
-			key = "statistics:" + aid + ":sunday"
-		default:
-		}
-		if err := global.RDb.HGet(ctx, key, "amount").Err(); err != nil {
-			m := map[string]interface{}{"orders": 1, "amount": param.TotalPrice}
-			global.RDb.HMSet(ctx, key, m)
-			global.RDb.Expire(ctx, key, time.Hour*24*7)
-			return rows
-		}
-		global.RDb.HIncrBy(ctx, key, "orders", 1)
-		global.RDb.HIncrByFloat(ctx, key, "amount", param.TotalPrice)
-		return rows
-	}
-	return rows
+	Id             uint    `gorm:"primaryKey"`
+	ProductItem    string  `gorm:"product_item"`
+	TotalPrice     float64 `gorm:"total_price"`
+	Status         string  `gorm:"status"`
+	CourierName    string  `gorm:"courier_name"`
+	ShipmentNumber uint    `gorm:"shipment_number"`
+	AddressId      uint    `gorm:"address_id"`
+	UserId         uint    `gorm:"user_id"`
+	UserName       string  `gorm:"user_id"`
+	AdminId        uint    `gorm:"admin_id"`
+	Created        string  `gorm:"created"`
+	Updated        string  `gorm:"updated"`
 }
 
 // Delete 删除订单
@@ -76,17 +31,24 @@ func (o *Order) Delete(id uint) int64 {
 // Update 更新订单
 func (o *Order) Update(param models.OrderParam) int64 {
 	order := Order{
-		Id:      param.Id,
-		Status:  param.Status,
-		Updated: common.NowTime(),
+		Id:             param.Id,
+		Status:         param.Status,
+		CourierName:    param.CourierName,
+		ShipmentNumber: param.ShipmentNumber,
+		Updated:        common.NowTime(),
 	}
 	return global.Db.Model(&order).Updates(order).RowsAffected
 }
 
 // GetList 获取订单列表
-func (o *Order) GetList(page models.Page) ([]models.OrderList, int64) {
+func (o *Order) GetList(page models.Page, param models.OrderParam) ([]models.OrderList, int64) {
 	orderList := make([]models.OrderList, 0)
-	rows := common.RestPage(page, "order", &Order{}, &orderList, &[]Order{})
+	query := &Order{
+		Id:      param.Id,
+		Status:  param.Status,
+		AdminId: param.AdminId,
+	}
+	rows := common.RestPage(page, "order", query, &orderList, &[]Order{})
 	return orderList, rows
 }
 

@@ -21,7 +21,7 @@ func (b *Brand) Create(param models.BrandParam) int64 {
 		Sort:    param.Sort,
 		Created: common.NowTime(),
 	}
-	return global.Db.Select("Name", "Sort", "Created").Create(&brand).RowsAffected
+	return global.Db.Create(&brand).RowsAffected
 }
 
 // Delete 删除品牌

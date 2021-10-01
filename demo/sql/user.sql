@@ -11,7 +11,7 @@
  Target Server Version : 80016
  File Encoding         : 65001
 
- Date: 27/09/2021 19:47:15
+ Date: 01/10/2021 21:06:07
 */
 
 SET NAMES utf8mb4;
@@ -38,8 +38,8 @@ CREATE TABLE `user` (
 -- ----------------------------
 BEGIN;
 INSERT INTO `user` VALUES (100030, 'admin', '123', 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png', 'ADMIN', 1, '2021-07-16 10:35:02', NULL);
-INSERT INTO `user` VALUES (100031, 'zhang', '123', 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png', 'USER', 1, '2021-09-16 10:35:02', NULL);
-INSERT INTO `user` VALUES (100032, 'wang', '123', 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png', 'USER', 2, '2021-09-16 10:35:02', NULL);
+INSERT INTO `user` VALUES (100031, 'zhang', '123', 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png', 'ADMIN', 2, '2021-09-16 10:35:02', NULL);
+INSERT INTO `user` VALUES (100032, 'wang', '123', 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png', 'USER', 1, '2021-09-16 10:35:02', NULL);
 COMMIT;
 
 SET FOREIGN_KEY_CHECKS = 1;

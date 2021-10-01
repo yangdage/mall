@@ -21,11 +21,10 @@
                            @change="changeProductKind"
                            clearable></el-cascader>
             </el-form-item>
-            <el-form-item label="商品品牌" prop="productBrandValue">
+            <el-form-item label="商品品牌" prop="productBrand">
               <el-select size="small"
-                         v-model="query.productBrandValue"
+                         v-model="query.productBrand"
                          @focus="getBrand"
-                         @change="changeProductBrand"
                          placeholder="请选择">
                 <el-option
                     v-for="item in brand.options"
@@ -37,9 +36,8 @@
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="商品状态" prop="productStateValue">
-              <el-select v-model="query.productStateValue"
-                         @change="changeProductState"
+            <el-form-item label="商品状态" prop="productStatus">
+              <el-select v-model="query.productStatus"
                          placeholder="请选择" size="small">
                 <el-option value="2" label="已上架">已上架</el-option>
                 <el-option value="1" label="未上架">未上架</el-option>
@@ -171,10 +169,9 @@ export default {
         productId: '',
         productKind: '',
         productBrand: '',
-        productState: '',
+        productStatus: '',
         productKindValue: '',
-        productBrandValue: '',
-        productStateValue: '',
+        // productBrandValue: '',
       },
       product: {
         options: null
@@ -195,12 +192,9 @@ export default {
     changeProductKind() {
       this.query.productKind = this.query.productKindValue[2];
     },
-    changeProductBrand() {
-      this.query.productBrand = this.query.productBrandValue;
-    },
-    changeProductState() {
-      this.query.productState = this.query.productStateValue;
-    },
+    // changeProductBrand() {
+    //   this.query.productBrand = this.query.productBrandValue;
+    // },
     handleCurrentChangePrev(val) {
       this.currentPage = val;
       console.log(`上一页: ${val}`);
@@ -241,7 +235,7 @@ export default {
           categoryId: this.query.productKind,
           brandId: this.query.productBrand,
           creatorId: localStorage.getItem("uid"),
-          status: this.query.productState
+          status: this.query.productStatus
         }
       }).then((response) => {
         this.total = response.data.data.total;
@@ -250,12 +244,10 @@ export default {
         console.log(error);
       })
     },
-    onSubmit() {
-      console.log();
-    },
     resetForm(formName) {
       this.$refs[formName].resetFields();
-      this.query.productStateValue = '';
+      this.query.productStatus = '';
+      this.selectGoodsList();
     },
     editProduct(index, row) {
       console.log(index)

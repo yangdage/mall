@@ -61,7 +61,7 @@ export default {
           ]
         },
         {
-          name: '3',
+          name: '/order/list',
           icon: 'el-icon-s-order',
           title: '订单',
           children: [
@@ -78,7 +78,7 @@ export default {
           ]
         },
         {
-          name: '4',
+          name: '/user/manage',
           icon: 'el-icon-user-solid',
           title: '用户',
           children: [
@@ -97,27 +97,8 @@ export default {
       ]
     }
   },
-  computed: {
-    Index: {
-      get() {
-        return this.$store.state.editableTabsValue
-      },
-      // set(val) {
-      //   this.$store.state.editableTabsValue = val
-      // }
-    },
-    editableTabsValue: {
-      get() {
-        return this.$store.state.editableTabsValue
-      },
-      set(val) {
-        this.$store.state.editableTabsValue = val
-      }
-    },
-  },
   methods: {
     selectMenu(menu, item) {
-      this.$store.commit("addTab", item)
       let newItem;
       if (menu.title === '首页'){
         newItem = {

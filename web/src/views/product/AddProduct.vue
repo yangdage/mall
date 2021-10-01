@@ -80,7 +80,7 @@
             <br>
             <el-form-item>
               <el-alert
-                  title="最多上传4张图，首张图为主图，商品主图大小不能超过3MB，支持任意格式的图片"
+                  title="只能上传1张商品图片，图片大小不能超过3MB，支持任意格式的图片"
                   type="info"
                   show-icon>
               </el-alert>
@@ -218,7 +218,7 @@ export default {
         sendAddress: this.product.sendAddress,
         parcelType: this.product.parcelType,
         salesService: salesServiceStr,
-        creatorId: localStorage.getItem('uid'),
+        creatorId: parseInt(localStorage.getItem("uid")),
         status: status
       }).then((response) => {
         if (response.data.code === 200){
