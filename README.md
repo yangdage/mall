@@ -4,7 +4,7 @@ mall 是一个基于 golang、 gin、 gorm、 vue3、element plus 开发的商�
 
 ### 最近更新
 
-**更新时间：2021-10-1** 
+**更新时间：2021-10-2** 
 
 **更新内容：** 优化了部分代码，修复了几个问题
 
@@ -79,6 +79,7 @@ $ npm run serve
 
 ![运行结果1](https://github.com/zchengo/mall/blob/main/demo/result/demo1.png?raw=true)
 ![运行结果2](https://github.com/zchengo/mall/blob/main/demo/result/demo2.png?raw=true)
+![运行结果3](https://github.com/zchengo/mall/blob/main/demo/result/demo3.png?raw=true)
 
 ### 使用说明
 

@@ -71,9 +71,9 @@ export default {
               title: '订单列表',
             },
             {
-              name: '/order/refund',
-              icon: 'el-icon-refresh-right',
-              title: '退款处理',
+              name: '/order/set',
+              icon: 'el-icon-setting',
+              title: '订单设置',
             }
           ]
         },

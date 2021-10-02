@@ -10,9 +10,9 @@ import ResultPage from "../views/result/ResultPage";
 import UserManage from "../views/user/UserManage";
 import OrderDetail from "../views/order/OrderDetail";
 import EditProduct from "../views/product/EditProduct";
-import RefundProcess from "../views/order/RefundProcess";
 import ResetPassword from "../views/user/ResetPassword";
 import MainPage from "../views/index/MainPage";
+import OrderSet from "../views/order/OrderSet";
 
 const routes = [
     {
@@ -60,9 +60,9 @@ const routes = [
                 component: OrderList,
             },
             {
-                path: '/order/refund',
-                name: 'orderRefund',
-                component: RefundProcess,
+                path: '/order/set',
+                name: 'orderSet',
+                component: OrderSet,
             },
             {
                 path: '/order/detail',

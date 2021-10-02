@@ -72,9 +72,11 @@
             label="订单状态"
             width="100">
           <template #default="scope">
-            <el-tag v-if="scope.row.status === '未支付'" size="mini" type="danger">未支付</el-tag>
-            <el-tag v-if="scope.row.status === '已支付'" size="mini" type="success">已支付</el-tag>
+            <el-tag v-if="scope.row.status === '待付款'" size="mini" type="danger">待付款</el-tag>
+            <el-tag v-if="scope.row.status === '待发货'" size="mini" type="success">待发货</el-tag>
             <el-tag v-if="scope.row.status === '已发货'" size="mini" type="primary">已发货</el-tag>
+            <el-tag v-if="scope.row.status === '待收货'" size="mini" type="primary">待收货</el-tag>
+            <el-tag v-if="scope.row.status === '待评价'" size="mini" type="primary">待评价</el-tag>
             <el-tag v-if="scope.row.status === '已完成'" size="mini" type="success">已完成</el-tag>
           </template>
         </el-table-column>
@@ -86,13 +88,16 @@
             </el-button>
             <el-button
                 size="mini"
-                v-if="scope.row.status === '已支付'"
+                v-if="scope.row.status === '待发货'"
                 type="primary"
                 @click="clickDelivery(scope.$index, scope.row)">发货
             </el-button>
             <el-button
                 size="mini"
-                v-if="scope.row.status === '未支付' || scope.row.status === '已发货'"
+                v-if="scope.row.status === '待付款' ||
+                scope.row.status === '已发货' ||
+                scope.row.status === '待收货' ||
+                scope.row.status === '待评价'"
                 type="primary"
                 @click="orderDelivery(scope.$index, scope.row)">提醒
             </el-button>
@@ -157,16 +162,24 @@ export default {
       total: '',
       options: [
         {
-          value: '未支付',
-          label: '未支付',
+          value: '待付款',
+          label: '待付款',
         },
         {
-          value: '已支付',
-          label: '已支付',
+          value: '待发货',
+          label: '待发货',
         },
         {
           value: '已发货',
           label: '已发货',
+        },
+        {
+          value: '待收货',
+          label: '待收货',
+        },
+        {
+          value: '待评价',
+          label: '待评价',
         },
         {
           value: '已完成',

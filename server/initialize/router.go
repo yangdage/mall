@@ -61,6 +61,8 @@ func Router() {
 
 	// 数据统计API
 	engine.GET("/statistics/info", api.GetStatisticsInfo)
+	engine.GET("/today/order/info", api.GetTodayOrderInfo)
+	engine.GET("/week/order/info", api.GetWeekInfo)
 
 	// 启动、监听端口
 	post := ":" + global.Config.Server.Post
