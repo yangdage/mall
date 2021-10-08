@@ -16,6 +16,7 @@ func DeleteOrder(c *gin.Context) {
 	count := order.Delete(key.Id)
 	if count > 0 {
 		response.Success("删除成功", count, c)
+		return
 	}
 	response.Failed("删除失败", c)
 }

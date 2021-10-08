@@ -15,7 +15,7 @@ type Brand struct {
 }
 
 // Create 创建品牌
-func (b *Brand) Create(param models.BrandParam) int64 {
+func (b *Brand) Create(param models.BrandFormParam) int64 {
 	brand := Brand{
 		Name:    param.Name,
 		Sort:    param.Sort,
@@ -30,7 +30,7 @@ func (b *Brand) Delete(id uint) int64 {
 }
 
 // Update 修改品牌
-func (b *Brand) Update(param models.BrandParam) int64 {
+func (b *Brand) Update(param models.BrandUpdateParam) int64 {
 	brand := Brand{
 		Id:      param.Id,
 		Name:    param.Name,
@@ -41,10 +41,10 @@ func (b *Brand) Update(param models.BrandParam) int64 {
 }
 
 // GetList 获取品牌列表
-func (b *Brand) GetList(page models.Page, param models.BrandParam) ([]models.BrandList, int64) {
+func (b *Brand) GetList(param models.BrandQueryParam) ([]models.BrandList, int64) {
 	brandList := make([]models.BrandList, 0)
 	query := &Brand{ Name: param.Name }
-	rows := common.RestPage(page, "brand", query, &brandList, &[]Brand{})
+	rows := common.RestPage(param.Page, "brand", query, &brandList, &[]Brand{})
 	return brandList, rows
 }
 

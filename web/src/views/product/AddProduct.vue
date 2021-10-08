@@ -1,115 +1,101 @@
 <template>
   <el-row>
     <el-col :span="18" :offset="3"><br>
-      <!-- 商品基本信息 -->
-      <el-descriptions direction="vertical" :column="4" border>
-        <el-descriptions-item label="基本信息"><br>
-          <el-form ref="form" :model="product" label-width="100px">
-            <el-form-item label="类目">
-              <el-cascader v-model="categoryValue"
-                           :options="product.options"
+      <el-form ref="product"
+               :model="product"
+               :rules="rules"
+               label-width="100px">
+        <el-descriptions direction="vertical" :column="4" border>
+          <el-descriptions-item label="基本信息"><br>
+            <el-form-item label="类目" prop="categoryId">
+              <el-cascader v-model="product.categoryId"
+                           :options="categoryOptions"
                            placeholder="请选择"
-                           @focus="getCategoryOption"
-                           @change="changeCategoryId"
-                           clearable />
+                           @focus="categoryOption"
+                           clearable/>
             </el-form-item>
-            <el-form-item label="类型">
-              <el-radio v-model="product.kind" :label="value1">全新</el-radio>
-              <el-radio v-model="product.kind" :label="value2">二手</el-radio>
+            <el-form-item label="类型" prop="kind">
+              <el-radio v-model.number="product.kind" :label="1">全新</el-radio>
+              <el-radio v-model.number="product.kind" :label="2">二手</el-radio>
             </el-form-item>
-            <el-form-item label="标题">
+            <el-form-item label="标题" prop="title">
               <el-input v-model="product.title"
-                        maxlength="30" style="width: 80%;"
+                        maxlength="30"
+                        style="width: 80%;"
                         show-word-limit></el-input>
             </el-form-item>
-            <el-form-item label="品牌" label-width="100px">
-              <el-select v-model="brandValue"
-                         @focus="getBrandOption"
-                         @change="changeBrandId"
+            <el-form-item label="品牌" label-width="100px" prop="brandId">
+              <el-select v-model.number="product.brandId"
+                         @focus="brandOption"
                          placeholder="请选择">
                 <el-option
-                    v-for="item in options"
+                    v-for="item in brandOptions"
                     :key="item.id"
                     :label="item.name"
                     :value="item.id">
                 </el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="名称">
+            <el-form-item label="名称" prop="name">
               <el-input v-model="product.name"
                         maxlength="20"
                         style="width: 60%;"
                         show-word-limit></el-input>
             </el-form-item>
-            <el-form-item label="售价" label-width="100px">
+            <el-form-item label="售价" label-width="100px" prop="price">
               <el-input v-model.number="product.price" style="width: 30%;">
                 <template #append>元</template>
               </el-input>
             </el-form-item>
-            <el-form-item label="库存" label-width="100px">
+            <el-form-item label="库存" label-width="100px" prop="amount">
               <el-input v-model.number="product.amount" style="width: 30%;">
                 <template #append>件</template>
               </el-input>
             </el-form-item>
-          </el-form>
-        </el-descriptions-item>
-      </el-descriptions>
-    </el-col>
-    <el-col :span="18" :offset="3"><br><br>
-      <!-- 商品图文描述 -->
-      <el-descriptions direction="vertical" :column="4" border>
-        <el-descriptions-item label="图文描述"><br>
-          <el-form ref="form" :model="product" label-width="100px">
-            <el-form-item label="商品主图">
-                  <el-upload
-                      action="http://localhost:8000/upload"
-                      :headers="{'token': token}"
-                      list-type="picture-card"
-                      limit="1"
-                      :on-success="handleAlbumSuccess"
-                      name="file">
-                    <i class="el-icon-plus"></i>
-                    <el-dialog v-model="dialogVisible">
-                      <el-image
-                          style="width: 100%; height: 100%"
-                          :src="product.imageUrl"></el-image>
-                      <img width="100%" :src="product.imageUrl" alt="">
-                    </el-dialog>
-                  </el-upload>
+          </el-descriptions-item>
+        </el-descriptions>
+        <el-descriptions direction="vertical" :column="4" border>
+          <el-descriptions-item label="图文描述"><br>
+            <el-form-item label="商品主图" prop="imageUrl">
+              <el-upload
+                  action="http://localhost:8000/upload"
+                  :headers="{'token': token}"
+                  list-type="picture-card"
+                  limit="1"
+                  :on-success="handleAlbumSuccess"
+                  name="file">
+                <i class="el-icon-plus"></i>
+                <el-dialog v-model="dialogVisible">
+                  <el-image
+                      style="width: 100%; height: 100%"
+                      :src="product.imageUrl"></el-image>
+                  <img width="100%" :src="product.imageUrl" alt="">
+                </el-dialog>
+              </el-upload>
             </el-form-item>
             <br>
-            <el-form-item>
+            <el-form-item label="提示">
               <el-alert
                   title="只能上传1张商品图片，图片大小不能超过3MB，支持任意格式的图片"
                   type="info"
                   show-icon>
               </el-alert>
             </el-form-item>
-          </el-form>
-        </el-descriptions-item>
-      </el-descriptions>
-    </el-col>
-    <el-col :span="18" :offset="3"><br><br>
-      <!-- 商品物流信息 -->
-      <el-descriptions direction="vertical" :column="4" border>
-        <el-descriptions-item label="物流信息"><br>
-          <el-form ref="form" :model="product" label-width="100px">
-            <el-form-item label="发货地址">
+          </el-descriptions-item>
+        </el-descriptions>
+        <el-descriptions direction="vertical" :column="4" border>
+          <el-descriptions-item label="物流信息"><br>
+            <el-form-item label="发货地址" prop="sendAddress">
               <el-input v-model="product.sendAddress" style="width: 60%;"></el-input>
             </el-form-item>
-            <el-form-item label="快递类型">
+            <el-form-item label="快递类型" prop="parcelType">
               <el-input v-model="product.parcelType" style="width: 60%;"></el-input>
             </el-form-item>
-          </el-form>
-        </el-descriptions-item>
-      </el-descriptions>
-    </el-col>
-    <el-col :span="18" :offset="3"><br><br>
-      <!-- 商品售后服务 -->
-      <el-descriptions direction="vertical" :column="4" border>
-        <el-descriptions-item label="售后服务"><br>
-          <el-form ref="form" :model="product" label-width="100px">
-            <el-form-item label="选择服务">
+          </el-descriptions-item>
+        </el-descriptions>
+        <el-descriptions direction="vertical" :column="4" border>
+          <el-descriptions-item label="售后服务"><br>
+            <el-form-item label="选择服务" prop="salesService">
               <el-checkbox-group v-model="product.salesService">
                 <el-checkbox label="提供发票" name="type"></el-checkbox>
                 <el-checkbox label="保修服务" name="type"></el-checkbox>
@@ -117,16 +103,14 @@
                 <el-checkbox label="服务承诺：该类商品，必须支持【七天退货】服务" name="type"></el-checkbox>
               </el-checkbox-group>
             </el-form-item>
-          </el-form>
-        </el-descriptions-item>
-      </el-descriptions>
-    </el-col>
-    <!--    -->
-    <el-col :span="24"><br><br>
-      <el-form-item style="text-align: center;">
-        <el-button type="primary" @click="onSubmit(0)">保存草稿</el-button>
-        <el-button type="primary" @click="onSubmit(1)">发布商品</el-button>
-      </el-form-item>
+          </el-descriptions-item>
+        </el-descriptions>
+        <el-form-item label-width="200px"><br>
+          <el-button type="primary" @click="resetForm('product')">重置</el-button>
+          <el-button type="primary" @click="submitForm('product', 1)">保存草稿</el-button>
+          <el-button type="primary" @click="submitForm('product', 2)">发布商品</el-button>
+        </el-form-item>
+      </el-form>
     </el-col>
   </el-row>
 </template>
@@ -137,12 +121,7 @@ export default {
   name: "AddProduct",
   data() {
     return {
-      value1: 1,
-      value2: 0,
-      categoryValue: null,
-      brandValue: null,
       product: {
-        options: null,
         categoryId: '',
         kind: '',
         title: '',
@@ -155,78 +134,169 @@ export default {
         parcelType: '',
         salesService: [],
       },
-      options: null,
+      rules: {
+        categoryId: [
+          {
+            required: true,
+            message: '请选择一个类目',
+            trigger: 'change',
+          },
+        ],
+        kind: [
+          {
+            required: true,
+            message: '请选择一种类型',
+            trigger: 'change',
+          },
+        ],
+        title: [
+          {
+            required: true,
+            message: '请输入一个标题',
+            trigger: 'blur'
+          },
+          {
+            min: 1,
+            max: 30,
+            message: '标题长度不能超过30个字',
+            trigger: 'blur'
+          }
+        ],
+        brandId: [
+          {
+            required: true,
+            message: '请选择一个品牌',
+            trigger: 'change'
+          }
+        ],
+        price: [
+          {
+            required: true,
+            message: '价格不能为空'
+          },
+          {
+            type: 'number',
+            message: '价格必须为数字'
+          }
+        ],
+        amount: [
+          {
+            required: true,
+            message: '库存不能为空'
+          },
+          {
+            type: 'number',
+            message: '库存必须为数字'
+          }
+        ],
+        imageUrl: [
+          {required: true,
+            message: '请选择一张图片',
+            trigger: 'blur'}
+        ],
+        sendAddress: [
+          {
+            required: true,
+            message: '请选择一张图片',
+            trigger: 'blur'
+          }
+        ],
+        parcelType: [
+          {
+            required: true,
+            message: '请选择一张图片',
+            trigger: 'blur'
+          }
+        ],
+        salesService: [
+          {
+            type: 'array',
+            required: true,
+            message: '至少选择一个服务',
+            trigger: 'change',
+          },
+        ],
+      },
+      categoryOptions: null,
+      brandOptions: null,
       dialogVisible: false,
-      token: ''
+      token: '',
     }
   },
   mounted() {
     this.token = localStorage.getItem('token')
   },
   methods: {
-    // 选择器更改时触发
-    changeCategoryId() {
-      this.product.categoryId = this.categoryValue[2];
-    },
-    // 选择器更改时触发
-    changeBrandId() {
-      this.product.brandId = this.brandValue;
-    },
+
     // 获取类目选项
-    getCategoryOption() {
+    categoryOption() {
       this.$axios.get('/category/option').then((response) => {
-        this.product.options = response.data.data;
-        console.log(response.data.data)
+        this.categoryOptions = response.data.data;
       }).catch((error) => {
         console.log(error)
       })
     },
+
     // 获取品牌选项
-    getBrandOption() {
+    brandOption() {
       this.$axios.get('/brand/option').then((response) => {
-        this.options = response.data.data;
-        console.log(response.data.data)
+        this.brandOptions = response.data.data;
       }).catch((error) => {
         console.log(error)
       })
     },
+
     // 图片响应结果处理
     handleAlbumSuccess(response) {
-      if (response.code === 200){
+      if (response.code === 200) {
         this.product.imageUrl = response.data;
       }
       console.log(response.data);
     },
-    // 创建商品（表单提交）
-    onSubmit(status) {
-      let salesServiceStr = '';
-      for (let i = 0; i < this.product.salesService.length; i++) {
-        salesServiceStr = salesServiceStr + this.product.salesService[i] + ',';
-      }
-      if (status === 0){ this.$store.commit('setPageTitle', '保存成功')}
-      else { this.$store.commit('setPageTitle', '发布成功' )}
 
-      this.$axios.post('/product/create', {
-        categoryId: this.product.categoryId,
-        kind: this.product.kind,
-        title: this.product.title,
-        brandId: this.product.brandId,
-        name: this.product.name,
-        price: this.product.price,
-        amount: this.product.amount,
-        imageUrl: this.product.imageUrl,
-        sendAddress: this.product.sendAddress,
-        parcelType: this.product.parcelType,
-        salesService: salesServiceStr,
-        creatorId: parseInt(localStorage.getItem("uid")),
-        status: status
-      }).then((response) => {
-        if (response.data.code === 200){
-          this.$router.push({name: 'resultPage'})
+    // 重置表单
+    resetForm(formName) {
+      this.$refs[formName].resetFields()
+    },
+
+    // 表单提交（保存或发布商品）
+    submitForm(formName, status) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          let salesServiceStr = '';
+          for (let i = 0; i < this.product.salesService.length; i++) {
+            salesServiceStr = salesServiceStr + this.product.salesService[i] + ',';
+          }
+          if (status === 0) {
+            this.$store.commit('setPageTitle', '保存成功')
+          } else {
+            this.$store.commit('setPageTitle', '发布成功')
+          }
+          this.$axios.post('/product/create', {
+            categoryId: this.product.categoryId[2],
+            kind: this.product.kind,
+            title: this.product.title,
+            brandId: this.product.brandId,
+            name: this.product.name,
+            price: this.product.price,
+            amount: this.product.amount,
+            imageUrl: this.product.imageUrl,
+            sendAddress: this.product.sendAddress,
+            parcelType: this.product.parcelType,
+            salesService: salesServiceStr,
+            creatorId: parseInt(localStorage.getItem("uid")),
+            status: status
+          }).then((response) => {
+            if (response.data.code === 200) {
+              this.$router.push({name: 'resultPage'})
+            }
+          }).catch((error) => {
+            console.log(error)
+          })
+        } else {
+          console.log('error submit!!')
+          return false
         }
-        console.log(response)
-      }).catch((error) => {
-        console.log(error)
       })
     }
   }

@@ -1,19 +1,24 @@
 <template>
   <el-row>
     <el-col :span="12" :offset="6"><br><br><br>
-      <el-card shadow="never">
+      <el-card shadow="never" class="card-box">
         <el-form ref="query" :model="query" label-width="80px">
           <el-form-item label="订单超过" prop="orderId">
-            <el-input v-model="input2" placeholder="Please input">
+            <el-input v-model="input2">
               <template #append>小时，未付款，订单自动关闭</template>
             </el-input>
           </el-form-item>
           <el-form-item label="发货超过" prop="orderId">
-            <el-input v-model="input2" placeholder="Please input">
+            <el-input v-model="input2">
               <template #append>小时，未收货，订单自动完成</template>
             </el-input>
           </el-form-item>
-          <el-form-item style="margin-left: 10px;">
+          <el-form-item label="评价超过" prop="orderId">
+            <el-input v-model="input2">
+              <template #append>小时，未评价，订单自动评价</template>
+            </el-input>
+          </el-form-item>
+          <el-form-item>
             <el-button @click="resetForm('query')" size="small">重置</el-button>
             <el-button type="primary" @click="queryOrder" size="small">提交</el-button>
           </el-form-item>
@@ -144,5 +149,9 @@ export default {
 </script>
 
 <style scoped>
-
+.card-box {
+  background-color: #F2F4F7;
+  margin: 18px;
+  border-radius: 6px;
+}
 </style>

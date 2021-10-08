@@ -11,8 +11,11 @@ var brand service.Brand
 
 // CreateBrand 创建品牌
 func CreateBrand(c *gin.Context) {
-	var param models.BrandParam
-	_ = c.ShouldBindJSON(&param)
+	var param models.BrandFormParam
+	if err := c.ShouldBind(&param); err != nil {
+		response.Failed("参数无效", c)
+		return
+	}
 	count := brand.Create(param)
 	if count > 0 {
 		response.Success("创建成功", count, c)
@@ -24,7 +27,10 @@ func CreateBrand(c *gin.Context) {
 // DeleteBrand 删除品牌
 func DeleteBrand(c *gin.Context) {
 	var key models.PrimaryKey
-	_ = c.Bind(&key)
+	if err := c.ShouldBind(&key); err != nil {
+		response.Failed("参数无效", c)
+		return
+	}
 	count := brand.Delete(key.Id)
 	if count > 0 {
 		response.Success("删除成功", count, c)
@@ -35,8 +41,11 @@ func DeleteBrand(c *gin.Context) {
 
 // UpdateBrand 更新品牌
 func UpdateBrand(c *gin.Context) {
-	var param models.BrandParam
-	_ = c.ShouldBindJSON(&param)
+	var param models.BrandUpdateParam
+	if err := c.ShouldBind(&param); err != nil {
+		response.Failed("参数无效", c)
+		return
+	}
 	count := brand.Update(param)
 	if count > 0 {
 		response.Success("更新成功", count, c)
@@ -47,11 +56,12 @@ func UpdateBrand(c *gin.Context) {
 
 // GetBrandList 获取品牌列表
 func GetBrandList(c *gin.Context) {
-	var page models.Page
-	var param models.BrandParam
-	_ = c.Bind(&page)
-	_ = c.Bind(&param)
-	brandList, rows := brand.GetList(page, param)
+	var param models.BrandQueryParam
+	if err := c.ShouldBind(&param); err != nil {
+		response.Failed("参数无效", c)
+		return
+	}
+	brandList, rows := brand.GetList(param)
 	response.SuccessPage("操作成功", brandList, rows, c)
 }
 

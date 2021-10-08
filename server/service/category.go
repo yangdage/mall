@@ -17,7 +17,7 @@ type Category struct {
 }
 
 // Create 创建类目
-func (c *Category) Create(param models.CategoryParam) uint {
+func (c *Category) Create(param models.CategoryFormParam) uint {
 	var category Category
 	result := global.Db.Where("name = ?", param.Name).First(&category)
 	if result.RowsAffected > 0 {
@@ -45,7 +45,7 @@ func (c *Category) Delete(id uint) int64 {
 }
 
 // Update 更新类目
-func (c *Category) Update(param models.CategoryParam) int64 {
+func (c *Category) Update(param models.CategoryUpdateParam) int64 {
 	category := Category{
 		Id:      param.Id,
 		Name:    param.Name,
@@ -56,7 +56,7 @@ func (c *Category) Update(param models.CategoryParam) int64 {
 }
 
 // GetList 获取类目列表
-func (c *Category) GetList(page models.Page, param models.CategoryParam) ([]models.CategoryList, int64) {
+func (c *Category) GetList(param models.CategoryQueryParam) ([]models.CategoryList, int64) {
 	categoryList := make([]models.CategoryList, 0)
 	query := &Category{
 		Id:       param.Id,
@@ -64,7 +64,7 @@ func (c *Category) GetList(page models.Page, param models.CategoryParam) ([]mode
 		Level:    param.Level,
 		ParentId: param.ParentId,
 	}
-	rows := common.RestPage(page, "category", query, &categoryList, &[]Category{})
+	rows := common.RestPage(param.Page, "category", query, &categoryList, &[]Category{})
 	return categoryList, rows
 }
 

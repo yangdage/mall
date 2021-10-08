@@ -84,6 +84,8 @@ export default {
 <style scoped>
 .el-header {
   background-color: white;
+  margin-bottom: 1px;
+  box-shadow:1px 1px 1px #dcdbdb;
 }
 .button-1{
   font-size: 22px;

@@ -237,16 +237,12 @@ export default {
     },
     deleteOrder(index, row) {
       console.log(index)
-      this.$axios.get('/order/delete', {
+      this.$axios.delete('/order/delete', {
         params: {
-          orderId: row.id,
+          id: row.id,
         }
       }).then((response) => {
          if (response.data.code === 200){
-           this.$message({
-             type: 'success',
-             message: '删除成功!'
-           });
            this.queryOrder();
          }
       }).catch((error) => {

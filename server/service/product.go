@@ -27,7 +27,7 @@ type Product struct {
 }
 
 // Create 创建商品
-func (p *Product) Create(param models.ProductParam) int64 {
+func (p *Product) Create(param models.ProductFormParam) int64 {
 	product := Product{
 		CategoryId:     param.CategoryId,
 		Kind:           param.Kind,
@@ -53,7 +53,7 @@ func (p *Product) Delete(id uint) int64 {
 }
 
 // Update 更新商品
-func (p *Product) Update(param models.ProductParam) int64 {
+func (p *Product) Update(param models.ProductUpdateParam) int64 {
 	product := Product{
 		Id: 			param.Id,
 		CategoryId:     param.CategoryId,
@@ -82,7 +82,7 @@ func (p *Product) GetInfo(id uint) models.ProductInfo {
 }
 
 // GetList 获取商品列表
-func (p *Product) GetList(page models.Page, param models.ProductParam) ([]models.ProductList, int64) {
+func (p *Product) GetList(param models.ProductQueryParam) ([]models.ProductList, int64) {
 	query := &Product{
 		Id:         param.Id,
 		CategoryId: param.CategoryId,
@@ -92,7 +92,7 @@ func (p *Product) GetList(page models.Page, param models.ProductParam) ([]models
 		CreatorId:  param.CreatorId,
 	}
 	productList := make([]models.ProductList, 0)
-	rows := common.RestPage(page, "product", query, &productList, &[]Product{})
+	rows := common.RestPage(param.Page, "product", query, &productList, &[]Product{})
 	return productList, rows
 }
 

@@ -207,6 +207,7 @@ export default {
       this.dialogTitle = '新建品牌';
       this.createButton = true;
       this.updateButton = false;
+      this.category.parentId = 1;
       this.category.levelTitle = '一级类目';
     },
 
