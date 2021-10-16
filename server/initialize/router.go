@@ -1,6 +1,7 @@
 package initialize
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"mall.com/api"
 	"mall.com/global"
@@ -66,5 +67,7 @@ func Router() {
 
 	// 启动、监听端口
 	post := ":" + global.Config.Server.Post
-	_ = engine.Run(post)
+	if err := engine.Run(post); err != nil {
+		fmt.Printf("server start error: %s", err)
+	}
 }

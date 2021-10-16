@@ -6,6 +6,7 @@ import (
 	"gorm.io/gorm"
 	"gorm.io/gorm/schema"
 	"mall.com/global"
+	"time"
 )
 
 // Mysql 配置MySQl数据库
@@ -19,6 +20,13 @@ func Mysql() {
 		fmt.Printf("mysql error: %s", err)
 		return
 	}
+	sqlDb, err := db.DB()
+	if err != nil {
+		fmt.Printf("mysql error: %s", err)
+	}
+	sqlDb.SetMaxIdleConns(10)
+	sqlDb.SetMaxOpenConns(100)
+	sqlDb.SetConnMaxLifetime(time.Hour)
 	global.Db = db
 }
 
