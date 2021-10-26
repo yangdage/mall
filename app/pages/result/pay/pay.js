@@ -1,5 +1,6 @@
 // pages/result/pay/pay.js
 Page({
+
   data: {
 
   },
