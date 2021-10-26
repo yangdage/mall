@@ -17,17 +17,7 @@ type User struct {
 	Updated  string `gorm:"updated"`
 }
 
-func (u *User) Login(param models.UserParam) uint {
-	var user User
-	query := map[string]interface{}{
-		"username": param.Username,
-		"password": param.Password,
-	}
-	global.Db.Where(query).First(&user)
-	return user.Id
-}
-
-func (u *User) Update(param models.UserParam) int64 {
+func (u *User) WebUpdate(param models.WebUserParam) int64 {
 	user := User{
 		Id:       param.Id,
 		Role:     param.Role,
@@ -37,12 +27,12 @@ func (u *User) Update(param models.UserParam) int64 {
 	return global.Db.Model(&user).Updates(user).RowsAffected
 }
 
-func (u *User) Delete(id uint) int64 {
+func (u *User) WebDelete(id uint) int64 {
 	return global.Db.Delete(&User{}, id).RowsAffected
 }
 
-func (u *User) GetList(page models.Page) (uList []models.UserList) {
-	userList := make([]models.UserList, 0)
+func (u *User) WebGetList(page models.Page) (uList []models.WebUserList) {
+	userList := make([]models.WebUserList, 0)
 	common.RestPage(page, "user", &User{}, &userList, &User{})
 	return userList
 }

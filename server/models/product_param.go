@@ -1,7 +1,7 @@
 package models
 
 // 商品表单参数模型
-type ProductFormParam struct {
+type WebProductFormParam struct {
 	CategoryId   uint    `json:"categoryId"   binding:"required,gt=0"`
 	Kind         int     `json:"kind"         binding:"required,oneof=1 2"`
 	Title        string  `json:"title"        binding:"required"`
@@ -18,7 +18,7 @@ type ProductFormParam struct {
 }
 
 // 商品更新参数模型
-type ProductUpdateParam struct {
+type WebProductUpdateParam struct {
 	Id           uint    `json:"id"           binding:"omitempty,gt=0"`
 	CategoryId   uint    `json:"categoryId"   binding:"omitempty,gt=0"`
 	Kind         int     `json:"kind"         binding:"omitempty,oneof=1 2"`
@@ -36,7 +36,7 @@ type ProductUpdateParam struct {
 }
 
 // 商品查询参数模型
-type ProductQueryParam struct {
+type WebProductQueryParam struct {
 	Page       Page
 	Id         uint   `form:"id"           binding:"omitempty,gt=0"`
 	CategoryId uint   `form:"categoryId"   binding:"omitempty,gt=0"`

@@ -1,6 +1,6 @@
 package models
 
-type UserParam struct {
+type WebUserParam struct {
 	Id           uint   `form:"primaryKey"   json:"id"`
 	Username     string `form:"username"     json:"username"`
 	Password     string `form:"password"     json:"password"`

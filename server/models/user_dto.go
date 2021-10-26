@@ -1,6 +1,6 @@
 package models
 
-type UserList struct {
+type WebUserList struct {
 	Id       uint   `json:"id"`
 	Avatar   string `json:"avatar"`
 	Username string `json:"username"`

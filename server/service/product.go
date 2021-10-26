@@ -26,8 +26,9 @@ type Product struct {
 	Updated      string  `gorm:"updated"`
 }
 
-// Create 创建商品
-func (p *Product) Create(param models.ProductFormParam) int64 {
+
+// WebCreate 创建商品
+func (p *Product) WebCreate(param models.WebProductFormParam) int64 {
 	product := Product{
 		CategoryId:     param.CategoryId,
 		Kind:           param.Kind,
@@ -47,13 +48,13 @@ func (p *Product) Create(param models.ProductFormParam) int64 {
 	return global.Db.Create(&product).RowsAffected
 }
 
-// Delete 删除商品
-func (p *Product) Delete(id uint) int64 {
+// WebDelete 删除商品
+func (p *Product) WebDelete(id uint) int64 {
 	return global.Db.Delete(&Product{}, id).RowsAffected
 }
 
-// Update 更新商品
-func (p *Product) Update(param models.ProductUpdateParam) int64 {
+// WebUpdate 更新商品
+func (p *Product) WebUpdate(param models.WebProductUpdateParam) int64 {
 	product := Product{
 		Id: 			param.Id,
 		CategoryId:     param.CategoryId,
@@ -74,15 +75,15 @@ func (p *Product) Update(param models.ProductUpdateParam) int64 {
 	return global.Db.Model(&product).Updates(product).RowsAffected
 }
 
-// GetInfo 获取商品信息
-func (p *Product) GetInfo(id uint) models.ProductInfo {
-	var product models.ProductInfo
+// WebGetInfo 获取商品信息
+func (p *Product) WebGetInfo(id uint) models.WebProductInfo {
+	var product models.WebProductInfo
 	global.Db.Table("product").First(&product, id)
 	return product
 }
 
-// GetList 获取商品列表
-func (p *Product) GetList(param models.ProductQueryParam) ([]models.ProductList, int64) {
+// WebGetList 获取商品列表
+func (p *Product) WebGetList(param models.WebProductQueryParam) ([]models.WebProductList, int64) {
 	query := &Product{
 		Id:         param.Id,
 		CategoryId: param.CategoryId,
@@ -91,8 +92,22 @@ func (p *Product) GetList(param models.ProductQueryParam) ([]models.ProductList,
 		Status:     param.Status,
 		CreatorId:  param.CreatorId,
 	}
-	productList := make([]models.ProductList, 0)
+	productList := make([]models.WebProductList, 0)
 	rows := common.RestPage(param.Page, "product", query, &productList, &[]Product{})
 	return productList, rows
+}
+
+// AppGetList 获取商品列表
+func (p *Product) AppGetList() []models.AppProductList {
+	pList := make([]models.AppProductList, 0)
+	global.Db.Table("product").Where("status = ?", 2).Find(&pList)
+	return pList
+}
+
+// AppGetList 获取商品详情
+func (p *Product) AppGetDetail(id uint) models.AppProductDetail {
+	var detail models.AppProductDetail
+	global.Db.Table("product").First(&detail, id)
+	return detail
 }
 

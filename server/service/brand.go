@@ -14,8 +14,8 @@ type Brand struct {
 	Updated string `gorm:"updated"`
 }
 
-// Create 创建品牌
-func (b *Brand) Create(param models.BrandFormParam) int64 {
+// WebCreate 创建品牌
+func (b *Brand) WebCreate(param models.WebBrandFormParam) int64 {
 	brand := Brand{
 		Name:    param.Name,
 		Sort:    param.Sort,
@@ -24,13 +24,13 @@ func (b *Brand) Create(param models.BrandFormParam) int64 {
 	return global.Db.Create(&brand).RowsAffected
 }
 
-// Delete 删除品牌
-func (b *Brand) Delete(id uint) int64 {
+// WebDelete 删除品牌
+func (b *Brand) WebDelete(id uint) int64 {
 	return global.Db.Delete(&Brand{}, id).RowsAffected
 }
 
-// Update 修改品牌
-func (b *Brand) Update(param models.BrandUpdateParam) int64 {
+// WebUpdate 修改品牌
+func (b *Brand) WebUpdate(param models.WebBrandUpdateParam) int64 {
 	brand := Brand{
 		Id:      param.Id,
 		Name:    param.Name,
@@ -40,17 +40,17 @@ func (b *Brand) Update(param models.BrandUpdateParam) int64 {
 	return global.Db.Model(&brand).Updates(brand).RowsAffected
 }
 
-// GetList 获取品牌列表
-func (b *Brand) GetList(param models.BrandQueryParam) ([]models.BrandList, int64) {
-	brandList := make([]models.BrandList, 0)
+// WebGetList 获取品牌列表
+func (b *Brand) WebGetList(param models.WebBrandQueryParam) ([]models.WebBrandList, int64) {
+	brandList := make([]models.WebBrandList, 0)
 	query := &Brand{ Name: param.Name }
 	rows := common.RestPage(param.Page, "brand", query, &brandList, &[]Brand{})
 	return brandList, rows
 }
 
-// GetOption 获取品牌选项
-func (b *Brand) GetOption() []models.BrandOption {
-	options := make([]models.BrandOption, 0)
+// WebGetOption 获取品牌选项
+func (b *Brand) WebGetOption() []models.WebBrandOption {
+	options := make([]models.WebBrandOption, 0)
 	global.Db.Table("brand").Find(&options)
 	return options
 }

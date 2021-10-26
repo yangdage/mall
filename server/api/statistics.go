@@ -9,26 +9,26 @@ import (
 
 var statistics service.Statistics
 
-// GetStatisticsInfo 获取统计信息（商品数、订单量、交易金额）
-func GetStatisticsInfo(c *gin.Context) {
+// WebGetStatisticsInfo 获取统计信息（商品数、订单量、交易金额）
+func WebGetStatisticsInfo(c *gin.Context) {
 	var key models.PrimaryKey
-	_ = c.Bind(&key)
-	info := statistics.GetStatisticsInfo(key.Id)
+	_ = c.ShouldBind(&key)
+	info := statistics.WebGetStatisticsInfo(key.Id)
 	response.Success("操作成功", info, c)
 }
 
-// GetTodayOrderInfo 获取今日订单信息
-func GetTodayOrderInfo(c *gin.Context) {
+// WebGetTodayOrderInfo 获取今日订单信息
+func WebGetTodayOrderInfo(c *gin.Context) {
 	var key models.PrimaryKey
-	_ = c.Bind(&key)
-	info := statistics.GetTodayOrderInfo(key.Id)
+	_ = c.ShouldBind(&key)
+	info := statistics.WebGetTodayOrderInfo(key.Id)
 	response.Success("操作成功", info, c)
 }
 
-// GetWeekInfo 获取每周订总览信息
-func GetWeekInfo(c *gin.Context) {
+// WebGetWeekInfo 获取每周订总览信息
+func WebGetWeekInfo(c *gin.Context) {
 	var key models.PrimaryKey
-	_ = c.Bind(&key)
-	info := statistics.GetWeekInfo(key.Id)
+	_ = c.ShouldBind(&key)
+	info := statistics.WebGetWeekInfo(key.Id)
 	response.Success("操作成功", info, c)
 }

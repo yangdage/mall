@@ -1,7 +1,7 @@
 package models
 
 // 品牌列表传输模型
-type BrandList struct {
+type WebBrandList struct {
 	Id      uint   `json:"id"`
 	Name    string `json:"name"`
 	Sort    int    `json:"sort"`
@@ -9,7 +9,7 @@ type BrandList struct {
 }
 
 // 品牌选项传输模型
-type BrandOption struct {
+type WebBrandOption struct {
 	Id   uint   `json:"id"`
 	Name string `json:"name"`
 }

@@ -1,7 +1,7 @@
 package models
 
 // 类目列表传输模型
-type CategoryList struct {
+type WebCategoryList struct {
 	Id       uint   `json:"id"`
 	Name     string `json:"name"`
 	ParentId uint   `json:"parentId"`
@@ -10,9 +10,8 @@ type CategoryList struct {
 }
 
 // 类目选项传输模型
-type CategoryOption struct {
-	Value    uint             `json:"value"`
-	Label    string           `json:"label"`
-	Children []CategoryOption `json:"children"`
+type WebCategoryOption struct {
+	Value    uint                `json:"value"`
+	Label    string              `json:"label"`
+	Children []WebCategoryOption `json:"children"`
 }
-
