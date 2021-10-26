@@ -106,14 +106,13 @@ $ npm install
 
 在编译运行微信小程序之前，你需要进行以下设置：
 
-1、在微信开发者工具右上角->【详情】->【本地设置】->【选择不校验合法域名，web-view（业务域名）、TLS版本...】。
+1、在微信开发者工具右上角->【详情】->【本地设置】-> 选择【使用npm模块】和【不校验合法域名，web-view（业务域名）、TLS版本...】。
 
 2、在微信开发者工具的工具栏->【工具】->【构建npm】。
 
-3、如果你没有自己的 appid 和 appSecret， 也就是说你没有修改 mall/server 目录下的配置文件里的 appid 和 appSecret，那么你是无法登录小程序商城的，
+3、如果你没有自己的 appid 和 appSecret， 也就是说你没有修改 mall/server 目录下的配置文件里的 appid 和 appSecret，那么你是无法登录小程序商城的，你可以通过修改 mall/app/app.json 文件：将  "pages/login/login" 与 "pages/main/home/home" 交换位置，让他优先加载首页，从而跳过登录页。
 
-你可以通过修改 mall/app/app.json 文件：将  "pages/login/login" 与 "pages/main/home/home" 交换位置，让他优先加载首页，从而跳过登录页。
-
+4、如果你想要使用微信扫码的方式预览小程序商城，你需要修改 mall/app/utils/request.js 中的 'http://localhost:8000/app', 将 localhost 改成本地网络的ip地址，同时还要保证你扫码预览的手机所连接的网络必须是同一个网络（就是手机连接的网络和运行mall/app的电脑所连接的网络要一样）。为了能够正常访问图片，你需要修改 mall/demo/sql/product.sql 执行所生成的 product表 的image_url字段中的路径，同样也是把localhost 改成本地网络的ip地址。
 
 #### 运行截图
 
