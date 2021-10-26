@@ -37,7 +37,6 @@
 </template>
 
 <script>
-
 export default {
   name: "Login",
   data() {
@@ -94,9 +93,9 @@ export default {
             captchaId: this.loginForm.captchaId,
             captchaValue: this.loginForm.captchaValue,
           }).then((response) => {
-            localStorage.setItem("token", response.data.data.token)
-            localStorage.setItem("uid", response.data.data.uid)
-            this.$router.push('/home');
+              localStorage.setItem("token", response.data.data.token)
+              localStorage.setItem("uid", response.data.data.uid)
+              this.$router.push('/home');
           }).catch((error) => { console.log(error); })
         }
       });

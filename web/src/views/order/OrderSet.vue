@@ -1,28 +1,38 @@
 <template>
   <el-row>
-    <el-col :span="12" :offset="6"><br><br><br>
+    <el-col :span="16" :offset="4"><br><br><br>
       <el-card shadow="never" class="card-box">
-        <el-form ref="query" :model="query" label-width="80px">
-          <el-form-item label="订单超过" prop="orderId">
-            <el-input v-model="input2">
-              <template #append>小时，未付款，订单自动关闭</template>
-            </el-input>
+        <el-form ref="query" :model="orderSet"><br>
+          <el-form-item label="订单付款超过" label-width="160px">
+            <el-select v-model.number="orderSet.paymentOvertime" placeholder="请选择">
+              <el-option label="12小时" value="12">12小时</el-option>
+              <el-option label="24小时" value="24">24小时</el-option>
+              <el-option label="48小时" value="48">48小时</el-option>
+              <template #append>.com</template>
+            </el-select>
+            <span>（ 未付款，订单自动关闭 ）</span>
           </el-form-item>
-          <el-form-item label="发货超过" prop="orderId">
-            <el-input v-model="input2">
-              <template #append>小时，未收货，订单自动完成</template>
-            </el-input>
+          <el-form-item label="订单收货超过" label-width="160px">
+            <el-select v-model.number="orderSet.receiveOvertime" placeholder="请选择">
+              <el-option label="12小时" value="12">12小时</el-option>
+              <el-option label="24小时" value="24">24小时</el-option>
+              <el-option label="48小时" value="48">48小时</el-option>
+            </el-select>
+            <span>（ 未确认，订单自动确认收货 ）</span>
           </el-form-item>
-          <el-form-item label="评价超过" prop="orderId">
-            <el-input v-model="input2">
-              <template #append>小时，未评价，订单自动评价</template>
-            </el-input>
-          </el-form-item>
-          <el-form-item>
-            <el-button @click="resetForm('query')" size="small">重置</el-button>
-            <el-button type="primary" @click="queryOrder" size="small">提交</el-button>
+          <el-form-item label="订单完成超过" label-width="160px">
+            <el-select v-model.number="orderSet.finishOvertime" placeholder="请选择">
+              <el-option label="7天" value="7">7天</el-option>
+              <el-option label="14天" value="14">14天</el-option>
+              <el-option label="21天" value="21">21天</el-option>
+            </el-select>
+            <span>（ 未评价，订单自动五星好评 ）</span>
           </el-form-item>
         </el-form>
+        <div style="text-align: center;margin: 50px;">
+          <el-button type="primary" @click="resetForm">重置</el-button>
+          <el-button type="primary" @click="submitForm">保存</el-button>
+        </div>
       </el-card>
     </el-col>
   </el-row>
@@ -33,125 +43,53 @@ export default {
   name: "OrderSet",
   data() {
     return {
-      query: {
-        orderId: '',
-        orderStatus: '',
-      },
-      order: {
+      orderSet: {
         id: '',
-        courierName: '',
-        shipmentNumber: '',
-      },
-      dialogFormVisible: false,
-      tableData: null,
-      currentPage: 1,
-      size: 10,
-      total: '',
-      options: [
-        {
-          value: '未支付',
-          label: '未支付',
-        },
-        {
-          value: '已支付',
-          label: '已支付',
-        },
-        {
-          value: '已发货',
-          label: '已发货',
-        },
-        {
-          value: '已完成',
-          label: '已完成',
-        }
-      ],
+        paymentOvertime: '',
+        receiveOvertime: '',
+        finishOvertime: ''
+      }
     }
   },
   mounted() {
-    this.queryOrder();
+    this.showInfo();
   },
   methods: {
     resetForm(formName) {
       this.$refs[formName].resetFields();
-      this.queryOrder();
     },
-    queryOrder() {
-      this.$axios.get('/order/list', {
+    showInfo() {
+      this.$axios.get('/order/set/info', {
         params: {
-          id: this.query.orderId,
-          status: this.query.orderStatus,
-          pageNum: this.currentPage,
-          pageSize: this.size,
-          adminId: localStorage.getItem("uid")
+          id: parseInt(localStorage.getItem("uid"))
         }
       }).then((response) => {
-        this.total = response.data.data.total;
-        this.tableData = response.data.data.list;
+        this.orderSet.id = response.data.data.id;
+        this.orderSet.paymentOvertime = response.data.data.paymentOvertime;
+        this.orderSet.receiveOvertime = response.data.data.receiveOvertime;
+        this.orderSet.finishOvertime = response.data.data.finishOvertime;
       }).catch((error) => {
         console.log(error);
       })
     },
-    checkOrder(index, row) {
-      console.log(index)
-      this.$router.push({
-        name: 'orderDetail',
-        params: {
-          id: row.id,
-          totalPrice: row.totalPrice
-        }
-      });
-    },
-    deleteOrder(index, row) {
-      console.log(index)
-      this.$axios.get('/order/delete', {
-        params: {
-          orderId: row.id,
-        }
-      }).then((response) => {
-        if (response.data.code === 200) {
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          });
-          this.queryOrder();
-        }
-      }).catch((error) => {
-        this.$message({
-          type: 'info',
-          message: '已取消删除'
-        });
-        console.log(error);
-      })
-
-    },
-    clickDelivery(index, row) {
-      this.dialogFormVisible = true;
-      this.order.id = row.id;
-    },
-    orderDelivery() {
-      this.$axios.put('/order/update', {
-        courierName: this.order.courierName,
-        shipmentNumber: this.order.shipmentNumber,
-        status: '已发货',
-        id: this.order.id,
+    submitForm() {
+      this.$axios.post('/order/set/save', {
+        id: this.orderSet.id,
+        paymentOvertime: this.orderSet.paymentOvertime,
+        receiveOvertime: this.orderSet.receiveOvertime,
+        finishOvertime: this.orderSet.finishOvertime,
         adminId: parseInt(localStorage.getItem("uid"))
-      }).then((response) => {
-        this.dialogFormVisible = false;
-        if (response.data.code === 200) {
-          this.queryOrder();
-        }
-      }).catch((error) => {
-        console.log(error);
-      })
-    }
+      }).then().catch()
+    },
   }
 }
 </script>
 
 <style scoped>
 .card-box {
-  background-color: #F2F4F7;
+  background-color: #FAFAFA;
   margin: 18px;
+  border: none;
   border-radius: 6px;
 }
 </style>

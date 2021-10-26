@@ -262,10 +262,8 @@ export default {
       this.$axios.put('/product/update', {
         id: row.id,
         status: 2
-      }).then((response) => {
-        if (response.data.code === 200) {
+      }).then(() => {
           this.selectGoodsList();
-        }
       }).catch((error) => {
         console.log(error);
       })
@@ -274,10 +272,8 @@ export default {
       this.$axios.put('/product/update', {
         id: row.id,
         status: 1
-      }).then((response) => {
-        if (response.data.code === 200) {
+      }).then(() => {
           this.selectGoodsList();
-        }
       }).catch((error) => {
         console.log(error);
       })
@@ -298,12 +294,7 @@ export default {
         }).catch((error) => {
           console.log(error);
         })
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消删除'
-        });
-      });
+      }).catch();
       console.log(index, row);
     },
   }
@@ -314,6 +305,7 @@ export default {
 .card-box {
   background-color: #F2F4F7;
   margin: 18px;
+  border: none;
   border-radius: 6px;
 }
 </style>

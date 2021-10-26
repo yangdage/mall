@@ -1,7 +1,7 @@
 import axios from "axios";
 import { ElMessage } from 'element-plus';
 
-axios.defaults.baseURL = "http://localhost:8000";
+axios.defaults.baseURL = "http://localhost:8000/web";
 
 const request = axios.create({
     timeout: 5000,
@@ -19,7 +19,7 @@ request.interceptors.response.use(response => {
     if (response.data.code === 200){
         console.log(response)
         let msg = response.data.message
-        if (msg === "登录成功" || msg === "创建成功" || msg === "删除成功" || msg === "更新成功"){
+        if (msg === '登录成功' || msg === '创建成功' || msg === '删除成功' || msg === '更新成功'){
             ElMessage.success(response.data.message)
         }
         return response;

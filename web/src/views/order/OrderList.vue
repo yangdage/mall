@@ -99,7 +99,7 @@
                 scope.row.status === '待收货' ||
                 scope.row.status === '待评价'"
                 type="primary"
-                @click="orderDelivery(scope.$index, scope.row)">提醒
+                @click="remindUser(scope.$index, scope.row)">提醒
             </el-button>
             <el-button
                 size="mini"
@@ -142,6 +142,7 @@
 </template>
 
 <script>
+import { ElNotification } from 'element-plus'
 export default {
   name: "OrderList",
   data() {
@@ -235,6 +236,12 @@ export default {
         }
       });
     },
+    remindUser() {
+      ElNotification.success({
+        title: '提醒成功',
+        message: '已向用户发送当前订单状态',
+      })
+    },
     deleteOrder(index, row) {
       console.log(index)
       this.$axios.delete('/order/delete', {
@@ -282,6 +289,7 @@ export default {
 .card-box {
   background-color: #F2F4F7;
   margin: 18px;
+  border: none;
   border-radius: 6px;
 }
 </style>

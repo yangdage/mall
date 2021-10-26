@@ -1,39 +1,48 @@
 <template>
   <el-row>
-    <el-col :span="14" :offset="5"><br><br>
-      <el-descriptions direction="vertical" :column="5" border>
+    <el-col :span="20" :offset="2"><br><br>
+      <el-descriptions direction="vertical" :column="6" border>
         <el-descriptions-item label="订单编号">{{order.id}}</el-descriptions-item>
         <el-descriptions-item label="提交时间">
           <i class="el-icon-time"></i>
           <span style="margin-left: 10px">{{ order.created }}</span>
         </el-descriptions-item>
-        <el-descriptions-item label="支付状态" :span="2">
-          <el-tag size="mini" v-if="order.paymentStatus === 1" type="primary">已支付</el-tag>
-          <el-tag size="mini" v-if="order.paymentStatus === 0" type="success">未支付</el-tag>
+        <el-descriptions-item label="用户账号">{{order.username}}</el-descriptions-item>
+        <el-descriptions-item label="订单状态" :span="2">
+          <el-tag v-if="order.status === '待付款'" size="mini" type="danger">待付款</el-tag>
+          <el-tag v-if="order.status === '待发货'" size="mini" type="success">待发货</el-tag>
+          <el-tag v-if="order.status === '已发货'" size="mini" type="primary">已发货</el-tag>
+          <el-tag v-if="order.status === '待收货'" size="mini" type="primary">待收货</el-tag>
+          <el-tag v-if="order.status === '待评价'" size="mini" type="primary">待评价</el-tag>
+          <el-tag v-if="order.status === '已完成'" size="mini" type="success">已完成</el-tag>
         </el-descriptions-item>
-        <el-descriptions-item label="订单状态" :span="2">{{order.status}}</el-descriptions-item>
+        <el-descriptions-item label="合计" :span="2">
+          <span> ¥ </span>
+          <span style="font-weight: 600;font-size: 16px;">{{order.totalPrice}}</span>
+        </el-descriptions-item>
       </el-descriptions><br>
     </el-col>
-    <el-col :span="14" :offset="5">
+    <el-col :span="20" :offset="2">
       <el-descriptions direction="vertical" :column="5" border>
         <el-descriptions-item label="收货人">{{order.name}}</el-descriptions-item>
         <el-descriptions-item label="手机号码">{{order.mobile}}</el-descriptions-item>
+        <el-descriptions-item label="邮政编码">{{order.postalCode}}</el-descriptions-item>
         <el-descriptions-item label="收货地址" :span="2">
           {{order.province + order.city + order.district + order.detailedAddress}}
         </el-descriptions-item>
       </el-descriptions><br>
     </el-col>
-    <el-col :span="14" :offset="5">
+    <el-col :span="20" :offset="2">
       <el-descriptions direction="vertical" border>
-        <el-descriptions-item label="商品信息" with="300">
+        <el-descriptions-item label="商品信息">
           <el-table
-              ref="multipleTable"
               :data="productItem"
-              stripe border>
+              height="280"
+              stripe>
             <el-table-column
                 prop="imageUrl"
-                label="图片"
-                width="200">
+                label="主图"
+                width="100">
               <template #default="scope">
                 <el-image
                     style="width: 50px; height: 50px"
@@ -41,23 +50,26 @@
               </template>
             </el-table-column>
             <el-table-column
+                prop="title"
+                label="标题"
+                width="370">
+            </el-table-column>
+            <el-table-column
                 prop="name"
                 label="名称"
-                width="220">
+                width="200">
             </el-table-column>
             <el-table-column
                 prop="price"
                 label="价格"
                 width="200">
+              <template #default="scope">
+                <span>¥ {{scope.row.price}}</span>
+              </template>
             </el-table-column>
           </el-table><br>
         </el-descriptions-item>
-      </el-descriptions><br>
-      <el-descriptions direction="vertical" border>
-        <el-descriptions-item label="合计" with="100">
-          ¥ {{order.totalPrice}}
-        </el-descriptions-item>
-      </el-descriptions><br><br><br>
+      </el-descriptions>
     </el-col>
   </el-row>
 </template>
@@ -70,15 +82,16 @@ export default {
       order: {
         id: 0,
         created: '',
-        paymentStatus: 0,
+        username: '',
         status: '',
+        totalPrice: '',
         name: '',
         mobile: '',
+        postalCode: '',
         province: '',
         city: '',
         district: '',
         detailedAddress: '',
-        totalPrice: ''
       },
       productItem: null
     }
@@ -96,11 +109,13 @@ export default {
       }).then(response => {
         let res = response.data.data;
         this.order.id =  res.id;
-        this.order.createTime = res.createTime;
-        this.order.paymentStatus = res.paymentStatus;
+        this.order.created = res.created;
+        this.order.username = res.username;
         this.order.status = res.status;
+        this.order.totalPrice = res.totalPrice;
         this.order.name = res.name;
         this.order.mobile = res.mobile;
+        this.order.postalCode = res.postalCode;
         this.order.province = res.province;
         this.order.city = res.city;
         this.order.district = res.district;

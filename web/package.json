@@ -1,5 +1,5 @@
 {
-  "name": "gomall",
+  "name": "mall",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -8,14 +8,14 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "@vue/compiler-sfc": "^3.0.11",
+    "@vue/compiler-sfc": "^3.2.20",
     "axios": "^0.21.4",
     "core-js": "^3.6.5",
     "echarts": "^5.2.1",
-    "element-plus": "^1.0.2-beta.71",
+    "element-plus": "^1.1.0-beta.20",
     "moment": "^2.29.1",
     "postcss": "^8.3.0",
-    "vue": "^3.0.11",
+    "vue": "^3.2.20",
     "vue-router": "^4.0.8",
     "vuex": "^4.0.2"
   },

@@ -8,7 +8,7 @@
       <i class="el-icon-s-home menu-icon"></i>
       <span>首页</span>
     </el-menu-item>
-    <el-submenu :index="menu.name" v-for="menu in menuList" :key="menu.title">
+    <el-sub-menu :index="menu.name" v-for="menu in menuList" :key="menu.title">
       <template #title>
         <i :class="menu.icon" class="menu-icon"></i>
         <span>{{menu.title}}</span>
@@ -19,7 +19,7 @@
             <span slot="title">{{item.title}}</span>
         </el-menu-item>
       </div>
-    </el-submenu>
+    </el-sub-menu>
   </el-menu>
 </template>
 

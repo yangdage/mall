@@ -299,6 +299,7 @@ export default {
 .card-box {
   background-color: #F2F4F7;
   margin: 18px;
+  border: none;
   border-radius: 6px;
 }
 </style>
