@@ -136,12 +136,11 @@ web后台管理员前端：
 
 ### 问题反馈
 
-本项目持续更新、优化，在使用过程中遇到问题，可以提交 Issues，也可以通过一下方式反馈：
+本项目持续更新、优化，在使用过程中遇到问题，可以提交 Issues，也可以通过以下方式反馈：
 
-作者的知乎（或知乎App搜索：酷酷的猿）：https://www.zhihu.com/people/ku-ku-de-yuan-4
+作者的知乎：https://www.zhihu.com/people/ku-ku-de-yuan-4
 
 作者的CSDN：https://blog.csdn.net/m0_47890251?spm=1000.2115.3001.5343
-
 
 
 
