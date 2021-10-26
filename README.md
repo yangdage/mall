@@ -1,6 +1,6 @@
 # mall
 ### 介绍
-mall 是一个基于 golang、 gin、 gorm、 vue3、element plus、 Vant Weapp 开发的商城系统，包括golang服务端、 Vue后台管理员前端、微信小程序用户前端，主要功能有商品管理、订单管理、用户管理、商品浏览、收藏加购、地址管理、订单查询等。
+mall 是一套商城系统，基于 golang、 gin、 gorm、 vue3、element plus、 Vant Weapp 开发，包括 golang服务端、 Vue后台管理员前端、微信小程序用户前端，主要功能有商品管理、订单管理、用户管理、商品浏览、收藏加购、地址管理、订单查询等。
 
 ### 最近更新
 
@@ -106,7 +106,9 @@ $ npm install
 在编译运行微信小程序之前，你需要进行以下设置：
 
 1、在微信开发者工具右上角->【详情】->【本地设置】->【选择不校验合法域名，web-view（业务域名）、TLS版本...】。
+
 2、在微信开发者工具的工具栏->【工具】->【构建npm】。
+
 3、如果你没有自己的 appid 和 appSecret， 也就是说你没有修改 mall/server 目录下的配置文件里的 appid 和 appSecret，那么你是无法登录小程序商城的，
 
 你可以通过修改 mall/app/app.json 文件：将  "pages/login/login" 与 "pages/main/home/home" 交换位置，让他优先加载首页，从而跳过登录页。
