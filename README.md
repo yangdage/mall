@@ -14,28 +14,28 @@ mall 是一套商城系统，基于 golang、 gin、 gorm、 vue3、element plus
 
 | 技术 | 说明 | 相关文档 |
 |---|---|---|
-| Vue3 | 前端框架 | https://v3.cn.vuejs.org |
-| Vue-Router | 页面路由 | https://next.router.vuejs.org |
-| Axios | 网络请求库 | https://axios-http.com |
-| Vuex | 状态管理 | https://next.vuex.vuejs.org |
-| Element Plus | 前端UI组件库 | https://element-plus.org |
+| vue3 | 前端框架 | https://v3.cn.vuejs.org |
+| vue-router | 页面路由 | https://next.router.vuejs.org |
+| axios | 网络请求库 | https://axios-http.com |
+| vuex | 状态管理 | https://next.vuex.vuejs.org |
+| element plus | 前端UI组件库 | https://element-plus.org |
 
 后端技术：
 
 | 技术 | 说明 | 相关文档 |
 |---|---|---|
-| Gin | Web框架 | https://gin-gonic.com |
-| Gorm | ORM框架 | https://gorm.io |
-| Jwt | 用户认证 | https://github.com/golang-jwt/jwt |
-| Captcha | 验证码生成器 | https://github.com/mojocn/base64Captcha |
-| Viper | 配置管理 | https://github.com/spf13/viper |
-| Redis | 配置管理 | https://github.com/go-redis/redis |
+| gin | Web框架 | https://gin-gonic.com |
+| gorm | ORM框架 | https://gorm.io |
+| jwt | 用户认证 | https://github.com/golang-jwt/jwt |
+| captcha | 验证码生成器 | https://github.com/mojocn/base64Captcha |
+| viper | 配置管理 | https://github.com/spf13/viper |
+| redis | 缓存 | https://github.com/go-redis/redis |
 
 微信小程序技术：
 
 | 技术 | 说明 | 相关文档 |
 |---|---|---|
-| Vant weapp | UI组件库 | https://vant-contrib.gitee.io/vant-weapp |
+| vant weapp | UI组件库 | https://vant-contrib.gitee.io/vant-weapp |
 | 微信小程序开发文档 | 官方文档 | https://developers.weixin.qq.com/miniprogram/dev/framework |
 
 
@@ -60,17 +60,18 @@ git clone https://github.com/zchengo/mall.git
 
 #### 相关资源文件
 
-数据库文件在 /demo/sql 目录中，推荐使用 Navicat 来运行SQL文件。图片文件在 /demo/image 目录中，请在自己的电脑中新建一个目录，用于存放这些图片。
+数据库文件在 mall/demo/sql 目录中，推荐使用 Navicat 来运行SQL文件。图片文件在 mall/demo/image 目录中，请在自己的电脑中新建一个目录，用于存放这些图片。
+
 
 #### 安装一：Go服务端（server）
 
-**修改配置文件：**
+修改配置文件：
 
 配置文件位于 /server/config.yaml，请按实际情况进行修改
 
-**初始化并运行：**
+初始化并运行：
 
-推荐使用 Goland 打开 server 目录，找到Terminal(终端)，执行如下命令。
+推荐使用 Goland 打开 server 目录，找到 Terminal(终端)，执行如下命令。
 ```
 $ cd server
 $ go generate
@@ -79,6 +80,7 @@ $ go build -o server main.go (windows编译命令为 go build -o server.exe main
 # 运行二进制
 $ ./server (windows运行命令为 server.exe)
 ```
+
 
 #### 安装二：Web后台管理前端（web）
 
@@ -89,11 +91,10 @@ $ npm install
 $ npm run serve
 ```
 
-**使用浏览器访问：** 
-
 成功启动后，即可通过浏览器访问：http://localhost:8080/#/login
 
 用户名: admin 密码: 123
+
 
 #### 安装三：微信小程序用户前端（app）
 
@@ -112,6 +113,7 @@ $ npm install
 3、如果你没有自己的 appid 和 appSecret， 也就是说你没有修改 mall/server 目录下的配置文件里的 appid 和 appSecret，那么你是无法登录小程序商城的，
 
 你可以通过修改 mall/app/app.json 文件：将  "pages/login/login" 与 "pages/main/home/home" 交换位置，让他优先加载首页，从而跳过登录页。
+
 
 #### 运行截图
 
