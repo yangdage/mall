@@ -11,7 +11,7 @@
  Target Server Version : 80016
  File Encoding         : 65001
 
- Date: 02/10/2021 21:09:22
+ Date: 26/10/2021 15:57:46
 */
 
 SET NAMES utf8mb4;
@@ -26,6 +26,7 @@ CREATE TABLE `address` (
   `user_id` varchar(200) DEFAULT NULL COMMENT '用户id',
   `name` varchar(255) DEFAULT NULL COMMENT '收货人姓名',
   `mobile` char(16) DEFAULT NULL COMMENT '手机号',
+  `postal_code` int(6) DEFAULT NULL COMMENT '邮政编码',
   `province` char(30) DEFAULT NULL COMMENT '省',
   `city` char(30) DEFAULT NULL COMMENT '城市',
   `district` char(30) DEFAULT NULL COMMENT '区/县',
@@ -34,15 +35,15 @@ CREATE TABLE `address` (
   `created` char(20) DEFAULT NULL COMMENT '创建时间',
   `updated` char(20) DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1007 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1095 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of address
 -- ----------------------------
 BEGIN;
-INSERT INTO `address` VALUES (1001, 'oUT385ZLmRr6R_a9xKSfSW9SekY1', '张三', '13900882903', '北京市AA', '北京市', 'xx区', 'xxx街道', 1, '2021-08-07 12:23:52', NULL);
-INSERT INTO `address` VALUES (1002, 'oUT385ZLmRr6R_a9xKSfSW9SekY1', '张三', '13900882903', '北京市AA', '北京市', 'xx区', 'xxx街道', 1, '2021-08-07 12:24:15', NULL);
-INSERT INTO `address` VALUES (1006, '100030', '王小明', '13500892350', '安徽省', '芜湖市', '芜湖县', 'xx小区xx栋', 0, '2021-08-08 09:41:09', NULL);
+INSERT INTO `address` VALUES (1049, 'oUT385ZLmRr6R_a9xKSfSW9SekYI', '王俊凯', '13390465582', 339911, '天津市', '天津市', '和平区', '抚平小区209栋33号', 2, '2021-10-25 12:51:53', '2021-10-25 19:03:26');
+INSERT INTO `address` VALUES (1050, 'oUT385ZLmRr6R_a9xKSfSW9SekYI', '王源', '13599005678', 335600, '北京市', '北京市', '东城区', '呜呜小区1004', 2, '2021-10-25 12:52:34', '2021-10-25 15:40:09');
+INSERT INTO `address` VALUES (1085, 'oUT385ZLmRr6R_a9xKSfSW9SekYI', '巴菲特', '13560907668', 133648, '辽宁省', '沈阳市', '和平区', '小区居民', 1, '2021-10-25 14:38:15', '2021-10-26 13:29:47');
 COMMIT;
 
 SET FOREIGN_KEY_CHECKS = 1;
