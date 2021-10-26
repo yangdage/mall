@@ -1,0 +1,10 @@
+{
+  "usingComponents": {
+    "van-search": "@vant/weapp/search/index",
+    "van-grid": "@vant/weapp/grid/index",
+    "van-grid-item": "@vant/weapp/grid-item/index",
+    "van-cell": "@vant/weapp/cell/index",
+    "van-image": "@vant/weapp/image/index"
+  },
+  "navigationBarTitleText": "百惠商城"
+}

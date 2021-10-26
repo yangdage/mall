@@ -1,0 +1,39 @@
+/* pages/tabbar/mine/mine.wxss */
+page{
+  background-color: #F2F2F2;
+}
+.view-user{
+  width: 100%;
+  height: auto;
+  display: inline-flex;
+  background: #f86f39;
+  background: -webkit-linear-gradient(to left, #fab465, #f86c35);
+  background: linear-gradient(to left, #fcb16a, #f36d38);
+}
+.view-user .avatar{
+  width: 24%;
+  text-align: center;
+  padding: 12% 0% 5% 0%;
+}
+.view-user .info{
+  width: 76%;
+  display: inline-block;
+  padding: 14% 0% 5% 0%;
+  color: white;
+}
+.nickname{
+  font-size: 36rpx;
+  display: block;
+}
+.number{
+  font-size: 22rpx;
+  display: block;
+}
+.grid-order{
+  margin: 3%;
+  border-radius: 8px;
+}
+.grid-service{
+  margin: 0% 3%;
+  border-radius: 8px;
+}

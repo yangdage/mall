@@ -1,0 +1,12 @@
+<!--pages/tabbar/classify/classify.wxml-->
+<van-search value="{{ value }}" placeholder="请输入搜索关键词" />
+<van-grid border="{{false}}" square="{{true}}" custom-class="grid-service" column-num="4">
+  <van-grid-item icon="/images/huawei.png" bind:click="sorry" text="华为手机" />
+  <van-grid-item icon="/images/xiaomi.png" bind:click="sorry" text="小米手机" />
+  <van-grid-item icon="/images/apple.png" bind:click="sorry" text="苹果手机" />
+  <van-grid-item icon="/images/oppo.png" bind:click="sorry" text="OPPO手机" />
+  <van-grid-item icon="/images/vivo.png" bind:click="sorry" text="VIVO手机" />
+  <van-grid-item icon="/images/sanxing.png" bind:click="sorry" text="三星手机" />
+  <van-grid-item icon="/images/meizu.png" bind:click="sorry" text="魅族手机" />
+  <van-grid-item icon="/images/honor.png" bind:click="sorry" text="荣耀手机" />
+</van-grid>
