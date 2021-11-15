@@ -31,10 +31,11 @@ Page({
 
   // 删除购物车中的商品
   async delete (event) {
-    let res = await request.get('/cart/delete',{
+    let res = await request.DELETE('/cart/delete',{
       productId: event.currentTarget.id,
       userId: wx.getStorageSync('uid')
     })
+    console.log("VVVV" + event.currentTarget.id)
     if(res.data.code === 200){ 
       this.setData({ cartItem: null })
       this.onShow()
@@ -43,7 +44,7 @@ Page({
 
   // 提交订单
   async submitOrder () {
-    let res = await request.post('/order/create',{
+    let res = await request.POST('/order/create',{
       userId: wx.getStorageSync('uid'),
       status: '待发货',
       nickName: wx.getStorageSync('nickName')
@@ -54,7 +55,7 @@ Page({
   },
 
   async clearCart () {
-    let res = await request.get('/cart/clear',{
+    let res = await request.DELETE('/cart/clear',{
       userId: wx.getStorageSync('uid'),
     })
     if(res.data.code === 200){ 
@@ -94,7 +95,7 @@ Page({
    */
   onShow: async function () {
     this.getTabBar().init();
-    let res = await request.get('/cart/info',{
+    let res = await request.GET('/cart/info',{
       userId: wx.getStorageSync('uid')
     })
     if(res.data.code === 200){

@@ -9,7 +9,6 @@ Page({
     wx.navigateTo({ url: '/pages/address/add/add' })
   },
   editAddress: function(event) {
-    console.log("AAA"+ event.currentTarget.id)
     wx.navigateTo({ url: '/pages/address/edit/edit?id=' + event.currentTarget.id })
   },
 
@@ -31,7 +30,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: async function () {
-    let res = await request.get('/address/list',{ 
+    let res = await request.GET('/address/list',{ 
       userId: wx.getStorageSync('uid')
     })
     this.setData({ address: res.data.data })

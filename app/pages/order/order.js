@@ -8,10 +8,11 @@ Page({
    */
   data: {
     orderList: null,
-    orderStatus: ['待付款', '待发货', '待收货', '待评价', '退款/售后'],
+    orderStatus: ['待付款', '待发货', '配送中', '待收货'],
     optionsId: null,
     description: '',
-    show: null
+    show: null,
+    buttonName: '立即支付'
   },
 
   onClick: function (event) {
@@ -21,7 +22,7 @@ Page({
   },
 
   async orderList(){
-    let res = await request.get('/order/list', {
+    let res = await request.GET('/order/list', {
       userId: wx.getStorageSync('uid')
     })
     this.setData({
@@ -47,7 +48,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: async function () {
-    let res = await request.get('/order/list',{
+    let res = await request.GET('/order/list',{
       userId: wx.getStorageSync('uid'),
       status: this.data.orderStatus[this.data.optionsId]
     });
@@ -59,6 +60,14 @@ Page({
         show: true,
         description: res.data.message
       })
+    }
+    console.log("AAAa" + this.data.optionsId)
+    let _this = this
+    switch (this.data.optionsId) {
+      case '0': _this.setData({ buttonName: '立即支付' }); break;
+      case '1': _this.setData({ buttonName: '提醒发货' }); break;
+      case '2': _this.setData({ buttonName: '查看物流' }); break;
+      case '3': _this.setData({ buttonName: '确认收货' }); break;
     }
   },
 

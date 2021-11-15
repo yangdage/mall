@@ -3,14 +3,18 @@ import request from '../../../utils/request'
 
 Page({
   data: {
-    background: ['/images/banner-1.png', '/images/banner-2.png', '/images/banner-1.png'],
+    background: [
+      '/images/banner-1.png', 
+      '/images/banner-2.png', 
+      '/images/banner-3.png'
+    ],
     product: null
   },
   async onClick(event) {
     wx.navigateTo({
       url: '/pages/product/detail/detail?id=' + event.currentTarget.id
     })
-    await request.get('/footmark/add', {
+    await request.POST('/browse/save', {
       productId: event.currentTarget.id,
       userId: wx.getStorageSync('uid')
     })
@@ -34,7 +38,7 @@ Page({
    */
   onShow: async function () {
     this.getTabBar().init();
-    let res = await request.get('/product/list');
+    let res = await request.GET('/product/list');
     this.setData({
       product: res.data.data
     })

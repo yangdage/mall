@@ -4,7 +4,9 @@
     "van-grid": "@vant/weapp/grid/index",
     "van-grid-item": "@vant/weapp/grid-item/index",
     "van-cell": "@vant/weapp/cell/index",
-    "van-image": "@vant/weapp/image/index"
+    "van-image": "@vant/weapp/image/index",
+    "van-icon": "@vant/weapp/icon/index",
+    "van-card": "@vant/weapp/card/index"
   },
-  "navigationBarTitleText": "百惠商城"
+  "navigationBarTitleText": "优菜商城"
 }

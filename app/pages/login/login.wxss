@@ -6,12 +6,6 @@
   text-align: center;
   padding: 180rpx 0;
 } 
-.title{
-  display: block;
-  font-size: 28rpx;
-  letter-spacing: 1px;
-  font-weight: 420;
-}
 .button{
   width: 80%;
   margin: 12% 10% 2% 10%;

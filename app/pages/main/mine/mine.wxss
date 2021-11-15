@@ -1,39 +1,58 @@
 /* pages/tabbar/mine/mine.wxss */
-page{
-  background-color: #F2F2F2;
+page {
+  background-color: #F5F5F5;
 }
-.view-user{
+.user-info {
   width: 100%;
-  height: auto;
   display: inline-flex;
-  background: #f86f39;
-  background: -webkit-linear-gradient(to left, #fab465, #f86c35);
-  background: linear-gradient(to left, #fcb16a, #f36d38);
+  padding: 25px 0 50px 0;
+  border-radius: 0 0 5% 5%;
+  background: #FF6600;
+  background-image: linear-gradient(#FF6600, #FF8C00);
 }
-.view-user .avatar{
-  width: 24%;
-  text-align: center;
-  padding: 12% 0% 5% 0%;
+
+.avatar {
+  width: 20%;
+  display: inline-flex;
+  padding-top: 4px;
+  justify-content: center;
+  align-items: center;
 }
-.view-user .info{
-  width: 76%;
-  display: inline-block;
-  padding: 14% 0% 5% 0%;
+
+.nickname {
+  width: 80%;
+  font-size: 32rpx;
+  display: inline-flex;
+  font-weight: 410;
   color: white;
+  justify-self: start;
+  align-items: center;
 }
-.nickname{
-  font-size: 36rpx;
-  display: block;
+
+.mine-order{
+  margin: -10% 3% 0 3%;
+  border-radius: 6px;
 }
-.number{
-  font-size: 22rpx;
-  display: block;
+
+.grid{
+  margin: 2% 3% 0 3%;
+  border-radius: 6px;
 }
-.grid-order{
-  margin: 3%;
+
+.cell-title{
+  font-size: 28rpx;
+  font-weight: 450;
+}
+
+.cell-value{
+  font-size: 24rpx;
+}
+
+
+/* .grid-order{
+  z-index: 1;
+  margin: -10% 3% 0% 3%;
   border-radius: 8px;
 }
-.grid-service{
-  margin: 0% 3%;
-  border-radius: 8px;
-}
+
+ */

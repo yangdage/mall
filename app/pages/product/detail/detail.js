@@ -10,12 +10,14 @@ Page({
   data: {
     product: null,
     productId: null,
+    productCount: 1,
     show: false,
+    showStepper: false,
     salesServiceList: null,
     starStatus: 0,
   },
   async onClickStar() {
-    let res = await request.post('/collection/add',{ 
+    let res = await request.POST('/collection/add',{ 
       productId: this.data.productId, 
       userId: wx.getStorageSync('uid')
     });
@@ -31,14 +33,8 @@ Page({
       url: '/pages/main/cart/cart',
     });
   },
-  async onClickAddCart() {
-    let res = await request.get('/cart/add',{
-      productId: this.data.productId,
-      userId: wx.getStorageSync('uid')
-    });
-    if(res.data.code === 200){
-      Toast.success('添加成功');
-    }
+  onChange(event) {
+    this.setData({ productCount: event.detail })
   },
 
   sorry() {
@@ -47,14 +43,26 @@ Page({
       icon: 'none',
     });
   },
-  showPopup() {
+  onClickAddCart() {
     this.setData({ show: true });
   },
   onClose() {
     this.setData({ show: false });
   },
-  onFinish() {
+
+  /**
+   * 点击完成时，完成，添加购物车
+   */
+  async onFinishAddCart() {
     this.setData({ show: false });
+    let res = await request.POST('/cart/add',{
+      productId: this.data.productId,
+      productCount: this.data.productCount,
+      userId: wx.getStorageSync('uid')
+    });
+    if(res.data.code === 200){
+      Toast.success('添加成功');
+    }
   },
   /**
    * 生命周期函数--监听页面加载
@@ -64,13 +72,10 @@ Page({
     this.setData({
       productId: options.id
     });
-    let res = await request.get('/product/detail',{ id: options.id });
-    console.log("AAA")
-    console.log(res.data.data)
-    this.setData({
-        product: res.data.data,
-        salesServiceList: res.data.data.salesService.split(',')
-    })
+    let res = await request.GET('/product/detail',{ 
+      productId: options.id
+    });
+    this.setData({ product: res.data.data })
   },
 
   /**

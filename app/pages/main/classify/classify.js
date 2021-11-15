@@ -1,11 +1,29 @@
 // pages/tabbar/classify/classify.js
+import request from '../../../utils/request'
+
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    
+    items: [],
+    mainActiveIndex: 0,
+    product: null
+  },
+
+  async onClickNav({ detail = {} }) {
+    this.setData({
+      mainActiveIndex: detail.index || 0,
+    });
+    let res = await request.GET('/product/list',{
+      categoryId: this.data.items[this.data.mainActiveIndex].id
+    });
+    if (res.data.code === 200){
+      this.setData({
+        product: res.data.data
+      })
+    }
   },
 
   sorry:function () {
@@ -29,8 +47,10 @@ Page({
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow: function () {
+  onShow: async function () {
     this.getTabBar().init();
+    let res = await request.GET('/category/option');
+    this.setData({ items: res.data.data })
   },
 
   /**

@@ -12,7 +12,7 @@ Page({
     })   
   },
   async deleteAll() {
-    let res = await request.get('/collection/delete', {
+    let res = await request.DELETE('/collection/delete', {
       userId: wx.getStorageSync('uid')
     })
     if(res.data.code === 200){
@@ -38,7 +38,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: async function () {
-    let res = await request.get('/collection/list', {
+    let res = await request.GET('/collection/list', {
       userId: wx.getStorageSync('uid')
     })
     this.setData({

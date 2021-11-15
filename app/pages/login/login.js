@@ -12,7 +12,7 @@ Page({
       async success (res) {
         if (res.code) {
           //发起登录请求
-          let response = await request.post('/login', { 
+          let response = await request.POST('/login', { 
             code: res.code
           })
           if(response.data.code === 200){

@@ -1,30 +1,41 @@
-// pages/footmark/footmark.js
+// pages/browse/browse.js
 import request from '../../utils/request'
 
 Page({
+
   data: {
-    product: null,
+    productIds: [],
+    browseInfo: null,
     show: null
   },
-  onClick: function (event) {
-    wx.navigateTo({
-      url: '/pages/product/detail/detail?id=' + event.currentTarget.id
-    })   
+
+  onChange(event) {
+    this.setData({ productIds: event.detail });
   },
-  async deleteAll() {
-    let res = await request.get('/footmark/delete', {
-      userId: wx.getStorageSync('uid')
+
+  toggle(event) {
+    const { index } = event.currentTarget.dataset;
+    const checkbox = this.selectComponent(`.checkboxes-${index}`);
+    checkbox.toggle();
+  },
+
+  noop() {},
+
+  delete: async function() {
+    let res = await request.DELETE('/browse/delete', {
+      userId: wx.getStorageSync('uid'),
+      productIds: this.data.productIds
     })
     if(res.data.code === 200){
       this.onShow()
     }
   },
-
+  
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    
+
   },
 
   /**
@@ -38,11 +49,11 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: async function () {
-    let res = await request.get('/footmark/list', {
+    let res = await request.GET('/browse/list', {
       userId: wx.getStorageSync('uid')
     })
     this.setData({
-      product: res.data.data
+      browseInfo: res.data.data
     })
     if(res.data.data === null){
       this.setData({ show: true })

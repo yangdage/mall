@@ -47,7 +47,7 @@ Page({
     });
   },
   async delete(event) {
-    let res = await request.get('/address/delete', { 
+    let res = await request.DELETE('/address/delete', { 
       addressId: this.data.addressId
     })
     if(res.data.code === 200){
@@ -57,7 +57,7 @@ Page({
     }
   },
   async submitForm(options) {
-    let res = await request.get('/address/update',{
+    let res = await request.PUT('/address/update',{
       name: this.data.name,
       mobile: this.data.mobile,
       postalCode: this.data.postalCode,
@@ -79,7 +79,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: async function (options) {
-    let res = await request.get('/address/info',{ addressId: options.id });
+    let res = await request.GET('/address/info',{ addressId: options.id });
     if(res.data.code === 200){
       var response = res.data.data;
       this.setData({
