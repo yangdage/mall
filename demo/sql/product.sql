@@ -11,7 +11,7 @@
  Target Server Version : 80016
  File Encoding         : 65001
 
- Date: 26/10/2021 15:58:25
+ Date: 15/11/2021 18:37:27
 */
 
 SET NAMES utf8mb4;
@@ -22,38 +22,42 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- ----------------------------
 DROP TABLE IF EXISTS `product`;
 CREATE TABLE `product` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '商品id',
-  `category_id` bigint(20) DEFAULT NULL COMMENT '类目id',
-  `kind` tinyint(1) DEFAULT NULL COMMENT '商品类型，1为全新，0为二手',
-  `title` varchar(240) DEFAULT NULL COMMENT '商品标题',
-  `brand_id` bigint(20) DEFAULT NULL COMMENT '品牌id',
-  `name` varchar(80) DEFAULT NULL COMMENT '商品名称',
-  `price` decimal(10,2) DEFAULT NULL COMMENT '价格',
-  `amount` int(10) DEFAULT NULL COMMENT '库存',
-  `sales` int(10) DEFAULT NULL COMMENT '销量',
-  `image_url` varchar(300) DEFAULT NULL COMMENT '图片路径',
-  `send_address` varchar(20) DEFAULT NULL COMMENT '发货地址',
-  `parcel_type` varchar(10) DEFAULT NULL COMMENT '快递类型',
-  `sales_service` varchar(50) DEFAULT NULL COMMENT '售后服务',
-  `creator_id` bigint(20) DEFAULT NULL COMMENT '创建者id',
-  `status` tinyint(1) DEFAULT NULL COMMENT '2为上架，1为下架',
-  `created` char(20) DEFAULT NULL COMMENT '创建时间',
-  `updated` char(20) DEFAULT NULL COMMENT '更新时间',
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '商品编号',
+  `category_id` bigint(20) DEFAULT NULL COMMENT '类目编号',
+  `title` varchar(50) DEFAULT NULL COMMENT '商品标题',
+  `description` varchar(80) DEFAULT NULL COMMENT '商品描述',
+  `price` decimal(20,2) DEFAULT NULL COMMENT '商品价格',
+  `amount` int(10) DEFAULT NULL COMMENT '商品数量',
+  `sales` int(10) DEFAULT NULL COMMENT '商品销量',
+  `main_image` varchar(80) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '商品主图',
+  `delivery` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '商品发货',
+  `assurance` varchar(30) DEFAULT NULL COMMENT '商品保障',
+  `name` varchar(30) DEFAULT NULL COMMENT '商品名称',
+  `weight` double(20,0) DEFAULT NULL COMMENT '商品重量',
+  `brand` varchar(10) DEFAULT NULL COMMENT '商品品牌',
+  `origin` varchar(80) DEFAULT NULL COMMENT '商品产地',
+  `shelf_life` int(20) DEFAULT NULL COMMENT '商品保质期',
+  `net_weight` double(20,0) DEFAULT NULL COMMENT '商品净含量',
+  `use_way` varchar(20) DEFAULT NULL COMMENT '使用方式',
+  `packing_way` varchar(20) DEFAULT NULL COMMENT '包装方式',
+  `storage_conditions` varchar(20) DEFAULT NULL COMMENT '存储条件',
+  `detail_image` varchar(80) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '详情图片',
+  `status` int(10) DEFAULT NULL COMMENT '商品状态',
+  `created` varchar(50) DEFAULT NULL COMMENT '创建时间',
+  `updated` varchar(50) DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=303 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of product
 -- ----------------------------
 BEGIN;
-INSERT INTO `product` VALUES (103, 148, 1, '荣耀Play5T手机 华为手机新款正品', 150, '荣耀Play5T', 8860.00, 1100, 900, 'http://localhost:8000/image/IMG_1190.JPG', '广东深圳', '申通快递', '提供发票,退换货承诺,服务承诺：该类商品，必须支持【七天退货】服务,,,,,,,', 100030, 2, '2021-07-28 13:53:59', '2021-10-22 16:42:36');
-INSERT INTO `product` VALUES (104, 151, 1, '红米Redmi Note 9 Pro 手机 骁龙750G', 153, '红米Redmi Note 9', 1188.00, 1330, 54, 'http://localhost:8000/image/IMG_1191.JPG', '广东深圳', '圆通速递', '提供发票,服务承诺：该类商品，必须支持【七天退货】服务,退换货承诺,,', 100030, 2, '2021-07-28 14:03:50', '2021-10-22 16:42:37');
-INSERT INTO `product` VALUES (105, 152, 1, 'Apple/苹果 iPhone11 全新国行正品 全网通双卡', 149, '苹果iPhone11', 2388.00, 550, 4829, 'http://localhost:8000/image/IMG_1193.JPG', '浙江杭州', '顺丰快递', '提供发票,服务承诺：该类商品，必须支持【七天退货】服务,', 100030, 2, '2021-07-28 14:13:31', '2021-10-21 14:55:52');
-INSERT INTO `product` VALUES (106, 156, 1, 'Apple苹果 MacBook Pro超薄便捷商务办公笔记本', 149, '苹果MacBook Pro', 6299.00, 1028, 445, 'http://localhost:8000/image/IMG_1194.JPG', '广东广州', '顺丰快递', '提供发票,保修服务,服务承诺：该类商品，必须支持【七天退货】服务,,', 100030, 2, '2021-07-28 14:26:01', '2021-10-22 16:42:39');
-INSERT INTO `product` VALUES (107, 158, 1, '联想小新air14/pro13 商务学生办公笔记本电脑', 114, '联想Air14', 3199.00, 505, 122, 'http://localhost:8000/image/IMG_1195.JPG', '湖北武汉', '申通快递', '提供发票,退换货承诺,', 100030, 2, '2021-07-28 14:36:30', '2021-10-21 14:52:10');
-INSERT INTO `product` VALUES (108, 161, 1, '小米全面屏电视Pro 65英寸E65S 4K超清智能网络电视', 153, '小米电视E65S', 2219.00, 1920, 89, 'http://localhost:8000/image/IMG_1196.JPG', '浙江杭州', '顺丰快递', '提供发票,退换货承诺,服务承诺：该类商品，必须支持【七天退货】服务,', 100030, 2, '2021-07-28 14:45:15', '2021-10-22 16:42:40');
-INSERT INTO `product` VALUES (109, 164, 1, 'Apple/苹果iPad8 正品平板电脑 10.2英寸', 149, '苹果iPad8', 2320.00, 1006, 103, 'http://localhost:8000/image/IMG_1197.JPG', '广东深圳', '申通快递', '提供发票,服务承诺：该类商品，必须支持【七天退货】服务,', 100030, 2, '2021-07-28 14:54:50', '2021-10-22 16:42:32');
-INSERT INTO `product` VALUES (110, 167, 1, '小米手环6智能血氧心率监测 蓝牙男女款运动计步器', 153, '小米手环6', 229.00, 1288, 5, 'http://localhost:8000/image/IMG_1198.JPG', '北京', '顺丰快递', '提供发票,退换货承诺,,,', 100030, 2, '2021-07-28 15:03:03', '2021-10-22 16:42:32');
+INSERT INTO `product` VALUES (9, 1098, '菠菜300g', '新鲜菠菜', 6.00, 351, 330, 'http://localhost:8000/image/IMG_1296.JPG', '现在下单，预计3小时内送达', '支持6小时内退换货', '菠菜', 300, '自营', '湖北省武汉市', 2, 300, '食用', '袋装', '常温', 'http://localhost:8000/image/IMG_1298.JPG', 2, '2021-11-05 10:17:05', '2021-11-09 20:43:45');
+INSERT INTO `product` VALUES (10, 1100, '大红西红柿（番茄）400g', '汁水丰盈 酸甜可口', 4.00, 680, 120, 'http://localhost:8000/image/IMG_1299.JPG', '现在下单，预计2小时送达', '支持6小时内退货', '西红柿（番茄）', 400, '自营', '湖北省武汉市', 3, 400, '食用', '袋装', '常温', 'http://localhost:8000/image/IMG_1300.JPG', 1, '2021-11-05 10:29:39', '');
+INSERT INTO `product` VALUES (11, 1102, '红洋葱450g', '葱香四溢 微辣清脆', 4.00, 233, 36, 'http://localhost:8000/image/IMG_1301.JPG', '现在发货，预计3小时送达', '支持6小时内退货', '红洋葱', 450, '自营', '广东省广州市', 7, 450, '炒菜食用', '袋装', '常温', 'http://localhost:8000/image/IMG_1302.JPG', 1, '2021-11-05 10:40:59', '2021-11-05 21:23:25');
+INSERT INTO `product` VALUES (12, 1103, '生菜300g', '新鲜生菜 看得见', 4.00, 106, 300, 'http://localhost:8000/image/IMG_1303.JPG', '现在下载，预计2小时送达', '不支持退换货', '生菜', 300, '自营', '湖北省武汉市', 3, 300, '食用', '袋装', '冷藏', 'http://localhost:8000/image/IMG_1304.JPG', 1, '2021-11-05 10:49:00', '2021-11-05 21:04:53');
+INSERT INTO `product` VALUES (13, 1104, '长白萝卜600g', '生熟两吃 美味不可挡', 5.00, 355, 550, 'http://localhost:8000/image/IMG_1305.JPG', '现在下单，预计2小时内送达', '支持5小时内退货', '长白萝卜', 600, '自营', '江西省南昌市', 5, 600, '食用', '袋装', '常温', 'http://localhost:8000/image/IMG_1306.JPG', 1, '2021-11-05 14:27:12', '');
+INSERT INTO `product` VALUES (14, 1105, '大白菜300g', '新鲜大白菜 超好吃', 5.00, 124, 8802, 'http://localhost:8000/image/IMG_1307.JPG', '现在下单，预计2小时送达', '支持3小时内退货', '大白菜', 300, '自营', '湖北省武汉市', 2, 300, '食用', '袋装', '常温', 'http://localhost:8000/image/IMG_1308.JPG', 1, '2021-11-05 14:33:09', '2021-11-05 21:02:58');
 COMMIT;
 
 SET FOREIGN_KEY_CHECKS = 1;

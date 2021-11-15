@@ -11,7 +11,7 @@
  Target Server Version : 80016
  File Encoding         : 65001
 
- Date: 26/10/2021 15:57:46
+ Date: 15/11/2021 18:37:04
 */
 
 SET NAMES utf8mb4;
@@ -35,15 +35,14 @@ CREATE TABLE `address` (
   `created` char(20) DEFAULT NULL COMMENT '创建时间',
   `updated` char(20) DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1095 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1098 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of address
 -- ----------------------------
 BEGIN;
-INSERT INTO `address` VALUES (1049, 'oUT385ZLmRr6R_a9xKSfSW9SekYI', '王俊凯', '13390465582', 339911, '天津市', '天津市', '和平区', '抚平小区209栋33号', 2, '2021-10-25 12:51:53', '2021-10-25 19:03:26');
-INSERT INTO `address` VALUES (1050, 'oUT385ZLmRr6R_a9xKSfSW9SekYI', '王源', '13599005678', 335600, '北京市', '北京市', '东城区', '呜呜小区1004', 2, '2021-10-25 12:52:34', '2021-10-25 15:40:09');
-INSERT INTO `address` VALUES (1085, 'oUT385ZLmRr6R_a9xKSfSW9SekYI', '巴菲特', '13560907668', 133648, '辽宁省', '沈阳市', '和平区', '小区居民', 1, '2021-10-25 14:38:15', '2021-10-26 13:29:47');
+INSERT INTO `address` VALUES (1096, 'oUT385ZLmRr6R_a9xKSfSW9SekYI', '张三', '13300003333', 303033, '浙江省', '湖州市', '长兴县', '三三小区3栋303', 1, '2021-11-09 16:28:37', '2021-11-15 18:13:44');
+INSERT INTO `address` VALUES (1097, 'oUT385ZLmRr6R_a9xKSfSW9SekYI', 'zchengo', '12300012300', 303045, '浙江省', '杭州市', '上城区', 'xxxx', 2, '2021-11-15 18:13:26', '');
 COMMIT;
 
 SET FOREIGN_KEY_CHECKS = 1;

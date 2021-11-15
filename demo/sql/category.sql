@@ -11,7 +11,7 @@
  Target Server Version : 80016
  File Encoding         : 65001
 
- Date: 26/10/2021 15:58:03
+ Date: 15/11/2021 18:37:12
 */
 
 SET NAMES utf8mb4;
@@ -30,18 +30,40 @@ CREATE TABLE `category` (
   `created` char(20) DEFAULT NULL COMMENT '创建时间',
   `updated` char(20) DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1062 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1106 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of category
 -- ----------------------------
 BEGIN;
-INSERT INTO `category` VALUES (1032, '手机数码', 1, 1, 60, '', '2021-10-21 14:54:42');
-INSERT INTO `category` VALUES (1033, '苹果', 1032, 2, 85, '', '2021-10-08 19:24:04');
-INSERT INTO `category` VALUES (1034, 'iPhone13', 1033, 3, 59, '', '2021-09-27 18:12:04');
-INSERT INTO `category` VALUES (1053, '文化用品', 1, 1, 53, '2021-09-28 09:07:18', '2021-10-21 14:49:17');
-INSERT INTO `category` VALUES (1054, 'IT图书', 1053, 2, 33, '2021-09-28 09:07:42', '');
-INSERT INTO `category` VALUES (1055, 'Go入门指南', 1054, 3, 90, '2021-09-28 09:08:09', '');
+INSERT INTO `category` VALUES (1077, '叶菜类', 1, 1, 100, '2021-11-03 10:10:05', '');
+INSERT INTO `category` VALUES (1078, '小白菜', 1077, 2, 80, '2021-11-03 10:10:21', '');
+INSERT INTO `category` VALUES (1079, '芹菜', 1077, 2, 35, '2021-11-03 10:11:38', '');
+INSERT INTO `category` VALUES (1080, '空心菜', 1077, 2, 32, '2021-11-03 10:12:16', '');
+INSERT INTO `category` VALUES (1081, '豆芽类', 1, 1, 60, '2021-11-03 10:12:46', '');
+INSERT INTO `category` VALUES (1082, '豆芽菜', 1081, 2, 35, '2021-11-03 10:12:55', '');
+INSERT INTO `category` VALUES (1083, '瓜果类', 1, 1, 34, '2021-11-03 10:24:58', '');
+INSERT INTO `category` VALUES (1084, '黄瓜', 1083, 2, 55, '2021-11-03 10:25:08', '');
+INSERT INTO `category` VALUES (1085, '冬瓜', 1083, 2, 77, '2021-11-03 10:25:32', '');
+INSERT INTO `category` VALUES (1086, '茄果类', 1, 1, 55, '2021-11-03 10:25:55', '');
+INSERT INTO `category` VALUES (1087, '辣椒', 1086, 2, 67, '2021-11-03 10:26:05', '');
+INSERT INTO `category` VALUES (1088, '根菜类', 1, 1, 12, '2021-11-03 10:26:19', '');
+INSERT INTO `category` VALUES (1089, '胡萝卜', 1088, 2, 33, '2021-11-03 10:26:29', '');
+INSERT INTO `category` VALUES (1090, '花菜类', 1, 1, 35, '2021-11-03 10:26:40', '');
+INSERT INTO `category` VALUES (1091, '西兰花', 1090, 2, 12, '2021-11-03 10:26:47', '');
+INSERT INTO `category` VALUES (1092, '豆荚类', 1, 1, 35, '2021-11-03 10:27:00', '');
+INSERT INTO `category` VALUES (1093, '豌豆', 1092, 2, 58, '2021-11-03 10:27:13', '');
+INSERT INTO `category` VALUES (1094, '菌菇类', 1, 1, 55, '2021-11-03 10:27:48', '');
+INSERT INTO `category` VALUES (1095, '香菇', 1094, 2, 12, '2021-11-03 10:27:58', '');
+INSERT INTO `category` VALUES (1096, '水生类', 1, 1, 12, '2021-11-03 10:28:44', '');
+INSERT INTO `category` VALUES (1097, '紫菜', 1096, 2, 12, '2021-11-03 10:28:47', '');
+INSERT INTO `category` VALUES (1098, '菠菜', 1077, 2, 55, '2021-11-05 09:44:49', '');
+INSERT INTO `category` VALUES (1100, '西红柿', 1086, 2, 39, '2021-11-05 10:23:49', '');
+INSERT INTO `category` VALUES (1101, '葱蒜类', 1, 1, 30, '2021-11-05 10:31:33', '');
+INSERT INTO `category` VALUES (1102, '红洋葱', 1101, 2, 55, '2021-11-05 10:32:04', '');
+INSERT INTO `category` VALUES (1103, '生菜', 1077, 2, 29, '2021-11-05 10:44:47', '');
+INSERT INTO `category` VALUES (1104, '长白萝卜', 1088, 2, 36, '2021-11-05 14:20:39', '');
+INSERT INTO `category` VALUES (1105, '大白菜', 1077, 2, 80, '2021-11-05 14:28:24', '');
 COMMIT;
 
 SET FOREIGN_KEY_CHECKS = 1;
