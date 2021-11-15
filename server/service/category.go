@@ -6,47 +6,41 @@ import (
 	"mall.com/models"
 )
 
-type Category struct {
-	Id       uint   `gorm:"primaryKey"`
-	Name     string `gorm:"name"`
-	ParentId uint   `gorm:"parent_id"`
-	Level    int    `gorm:"level"`
-	Sort     int    `gorm:"sort"`
-	Created  string `gorm:"created"`
-	Updated  string `gorm:"updated"`
+type WebCategoryService struct {
 }
 
-// WebCreate 创建类目
-func (c *Category) WebCreate(param models.WebCategoryFormParam) uint {
-	var category Category
+type AppCategoryService struct {
+}
+
+// Create 后台管理前端，创建类目
+func (c *WebCategoryService) Create(param models.WebCategoryCreateParam) uint64 {
+	var category models.Category
 	result := global.Db.Where("name = ?", param.Name).First(&category)
 	if result.RowsAffected > 0 {
 		return category.Id
 	}
-	category = Category{
+	category = models.Category{
 		Name:     param.Name,
 		ParentId: param.ParentId,
 		Level:    param.Level,
 		Sort:     param.Sort,
 		Created:  common.NowTime(),
 	}
-	if global.Db.Create(&category).RowsAffected > 0 {
-		return category.Id
-	}
-	return 0
+	global.Db.Create(&category)
+	return category.Id
 }
 
-// WebDelete 删除类目
-func (c *Category) WebDelete(id uint) int64 {
-	var pid2, pid3 Category
-	global.Db.Where("parent_id = ?", id).First(&pid2)
+// Delete 后台管理前端，删除类目
+func (c *WebCategoryService) Delete(param models.WebCategoryDeleteParam) int64 {
+	var pid2, pid3 models.Category
+	global.Db.Where("parent_id = ?", param.Id).First(&pid2)
 	global.Db.Where("parent_id = ?", pid2.Id).First(&pid3)
-	return global.Db.Delete(&Category{}, []uint{id, pid2.Id, pid3.Id}).RowsAffected
+	return global.Db.Delete(&models.Category{}, []uint64{param.Id, pid2.Id, pid3.Id}).RowsAffected
 }
 
-// WebUpdate 更新类目
-func (c *Category) WebUpdate(param models.WebCategoryUpdateParam) int64 {
-	category := Category{
+// Update 后台管理前端，更新类目
+func (c *WebCategoryService) Update(param models.WebCategoryUpdateParam) int64 {
+	category := models.Category{
 		Id:      param.Id,
 		Name:    param.Name,
 		Sort:    param.Sort,
@@ -55,39 +49,48 @@ func (c *Category) WebUpdate(param models.WebCategoryUpdateParam) int64 {
 	return global.Db.Model(&category).Updates(category).RowsAffected
 }
 
-// WebGetList 获取类目列表
-func (c *Category) WebGetList(param models.WebCategoryQueryParam) ([]models.WebCategoryList, int64) {
+// GetList 后台管理前端，获取类目列表
+func (c *WebCategoryService) GetList(param models.WebCategoryQueryParam) ([]models.WebCategoryList, int64) {
 	categoryList := make([]models.WebCategoryList, 0)
-	query := &Category{
+	query := &models.Category{
 		Id:       param.Id,
 		Name:     param.Name,
 		Level:    param.Level,
 		ParentId: param.ParentId,
 	}
-	rows := common.RestPage(param.Page, "category", query, &categoryList, &[]Category{})
+	rows := common.RestPage(param.Page, "category", query, &categoryList, &[]models.Category{})
 	return categoryList, rows
 }
 
-// WebGetOption 获取类目选项
-func (c *Category) WebGetOption() (option []models.WebCategoryOption) {
+// GetOption 后台管理前端，获取类目选项
+func (c *WebCategoryService) GetOption() (option []models.WebCategoryOption) {
 	selectList := make([]models.WebCategoryList, 0)
 	global.Db.Table("category").Find(&selectList)
 	return getTreeOptions(1, selectList)
 }
 
+// GetOption 微信小程序，获取类目选项
+func (c *AppCategoryService) GetOption() []models.AppCategoryOption {
+	var category []models.Category
+	optionList := make([]models.AppCategoryOption, 0)
+	global.Db.Table("category").Where("parent_id = ?", 1).Find(&category)
+	for _, c := range category {
+		optionList = append(optionList, models.AppCategoryOption{ Id: c.Id, Text: c.Name })
+	}
+	return optionList
+}
+
 // 获取树形结构的选项
-func getTreeOptions(id uint, cateList []models.WebCategoryList) (option []models.WebCategoryOption) {
+func getTreeOptions(id uint64, cateList []models.WebCategoryList) (option []models.WebCategoryOption) {
 	optionList := make([]models.WebCategoryOption, 0)
 	for _, opt := range cateList {
-		if opt.ParentId == id && (opt.Level == 1 || opt.Level == 2 || opt.Level == 3) {
+		if opt.ParentId == id && (opt.Level == 1 || opt.Level == 2) {
 			option := models.WebCategoryOption{
 				Value:    opt.Id,
 				Label:    opt.Name,
 				Children: getTreeOptions(opt.Id, cateList),
 			}
-			if opt.Level == 3 {
-				option.Children = nil
-			}
+			if opt.Level == 2 { option.Children = nil }
 			optionList = append(optionList, option)
 		}
 	}

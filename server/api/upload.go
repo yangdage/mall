@@ -8,7 +8,7 @@ import (
 
 // WebFileUpload 图片文件上传
 func WebFileUpload(c *gin.Context) {
-	file, err := c.FormFile("file")
+	file, err := c.FormFile("image")
 	if err != nil {
 		response.Failed("上传图片出错", c)
 	}

@@ -7,71 +7,69 @@ import (
 	"mall.com/service"
 )
 
-var address service.Address
+var address service.AddressService
 
-// AppAddAddress 创建地址
+// AppAddAddress 微信小程序，添加地址
 func AppAddAddress(c *gin.Context) {
-	var param models.AppAddressFormParam
+	var param models.AppAddressAddParam
 	if err := c.ShouldBind(&param); err != nil {
-		response.Failed("参数无效", c)
+		response.Failed("请求参数无效", c)
 		return
 	}
-	count := address.AppAdd(param)
-	if count > 0 {
-		response.Success("创建成功", count, c)
+	if count := address.Add(param); count > 0 {
+		response.Success("添加成功", count, c)
 		return
 	}
-	response.Failed("创建失败", c)
+	response.Failed("添加失败", c)
 }
 
-// AppDeleteAddress 删除地址
+// AppDeleteAddress 微信小程序，删除地址
 func AppDeleteAddress(c *gin.Context) {
 	var key models.AppAddressDeleteParam
 	if err := c.ShouldBind(&key); err != nil {
-		response.Failed("参数无效", c)
+		response.Failed("请求参数无效", c)
 		return
 	}
-	count := address.AppDelete(key.AddressId)
-	if count > 0 {
+	if count := address.Delete(key.AddressId); count > 0 {
 		response.Success("删除成功", count, c)
 		return
 	}
 	response.Failed("删除失败", c)
 }
 
-// AppUpdateAddress 更新地址
+// AppUpdateAddress 微信小程序，更新地址
 func AppUpdateAddress(c *gin.Context) {
 	var param models.AppAddressUpdateParam
 	if err := c.ShouldBind(&param); err != nil {
-		response.Failed("参数无效", c)
+		response.Failed("请求参数无效", c)
 		return
 	}
-	count := address.AppUpdate(param)
+	count := address.Update(param)
 	if count > 0 {
-		response.Success("创建成功", count, c)
+		response.Success("更新成功", count, c)
 		return
 	}
-	response.Failed("创建失败", c)
+	response.Failed("更新失败", c)
 }
 
-// AppGetAddressUpdateInfo 获取地址更新信息
+// AppGetAddressUpdateInfo 微信小程序，获取地址更新信息
 func AppGetAddressUpdateInfo(c *gin.Context) {
 	var key models.AppAddressInfoParam
 	if err := c.ShouldBind(&key); err != nil {
-		response.Failed("参数无效", c)
+		response.Failed("请求参数无效", c)
 		return
 	}
-	info := address.AppGetUpdateInfo(key.AddressId)
-	response.Success("操作成功", info, c)
+	info := address.GetInfo(key.AddressId)
+	response.Success("查询成功", info, c)
 }
 
-// AppGetAddressList 获取地址列表
+// AppGetAddressList 微信小程序，获取地址列表
 func AppGetAddressList(c *gin.Context) {
 	var param models.AppAddressListParam
 	if err := c.ShouldBind(&param); err != nil {
-		response.Failed("参数无效", c)
+		response.Failed("请求参数无效", c)
 		return
 	}
-	addressList := address.AppGetList(param.UserId)
-	response.Success("操作成功", addressList, c)
+	addressList := address.GetList(param.UserId)
+	response.Success("查询成功", addressList, c)
 }

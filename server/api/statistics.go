@@ -2,33 +2,26 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
-	"mall.com/models"
 	"mall.com/response"
 	"mall.com/service"
 )
 
-var statistics service.Statistics
+var webStatistics service.WebStatisticsService
 
-// WebGetStatisticsInfo 获取统计信息（商品数、订单量、交易金额）
-func WebGetStatisticsInfo(c *gin.Context) {
-	var key models.PrimaryKey
-	_ = c.ShouldBind(&key)
-	info := statistics.WebGetStatisticsInfo(key.Id)
-	response.Success("操作成功", info, c)
+// WebGetDataOverviewInfo 后台管理前端，获取数据总览统计信息
+func WebGetDataOverviewInfo(c *gin.Context) {
+	overviewInfo := webStatistics.GetDataOverviewInfo()
+	response.Success("查询成功", overviewInfo, c)
 }
 
-// WebGetTodayOrderInfo 获取今日订单信息
-func WebGetTodayOrderInfo(c *gin.Context) {
-	var key models.PrimaryKey
-	_ = c.ShouldBind(&key)
-	info := statistics.WebGetTodayOrderInfo(key.Id)
-	response.Success("操作成功", info, c)
+// WebGetTodayOrderDataInfo 后台管理前端，获取今日订单数据统计信息
+func WebGetTodayOrderDataInfo(c *gin.Context) {
+	todayInfo := webStatistics.GetTodayDataInfo()
+	response.Success("查询成功", todayInfo, c)
 }
 
-// WebGetWeekInfo 获取每周订总览信息
-func WebGetWeekInfo(c *gin.Context) {
-	var key models.PrimaryKey
-	_ = c.ShouldBind(&key)
-	info := statistics.WebGetWeekInfo(key.Id)
-	response.Success("操作成功", info, c)
+// WebGetWeekDataInfo 后台管理前端，获取本周数据统计信息
+func WebGetWeekDataInfo(c *gin.Context) {
+	weekInfo := webStatistics.GetWeekDataInfo()
+	response.Success("查询成功", weekInfo, c)
 }

@@ -7,24 +7,13 @@ import (
 	"mall.com/models"
 )
 
-type Address struct {
-	Id              uint   `gorm:"primaryKey"`
-	UserId          string `gorm:"user_id"`
-	Name            string `gorm:"name"`
-	Mobile          string `gorm:"mobile"`
-	PostalCode      int    `gorm:"postal_code"`
-	Province        string `gorm:"province"`
-	City            string `gorm:"city"`
-	District        string `gorm:"district"`
-	DetailedAddress string `gorm:"detailed_address"`
-	IsDefault       int    `gorm:"is_default"`
-	Created         string `gorm:"created"`
-	Updated         string `gorm:"updated"`
+type AddressService struct {
+
 }
 
-// AppAdd 新建地址
-func (a *Address) AppAdd(param models.AppAddressFormParam) int64 {
-	address := Address{
+// Add 微信小程序，添加地址
+func (a *AddressService) Add(param models.AppAddressAddParam) int64 {
+	address := models.Address{
 		UserId:          param.UserId,
 		Name:            param.Name,
 		Mobile:          param.Mobile,
@@ -50,14 +39,14 @@ func (a *Address) AppAdd(param models.AppAddressFormParam) int64 {
 	return global.Db.Create(&address).RowsAffected
 }
 
-// AppDelete 删除地址
-func (a *Address) AppDelete(id uint) int64 {
-	return global.Db.Delete(&Address{}, id).RowsAffected
+// Delete 微信小程序，删除地址
+func (a *AddressService) Delete(id uint) int64 {
+	return global.Db.Delete(&models.Address{}, id).RowsAffected
 }
 
-// AppUpdate 更新地址
-func (a *Address) AppUpdate(param models.AppAddressUpdateParam) int64 {
-	address := Address{
+// Update 微信小程序，更新地址
+func (a *AddressService) Update(param models.AppAddressUpdateParam) int64 {
+	address := models.Address{
 		Id:              param.Id,
 		UserId:          param.UserId,
 		Name:            param.Name,
@@ -85,23 +74,23 @@ func (a *Address) AppUpdate(param models.AppAddressUpdateParam) int64 {
 	return global.Db.Updates(&address).RowsAffected
 }
 
-// AppGetId 获取地址Id
-func (a *Address) AppGetId(uid string) uint {
-	var id uint
+// GetId 微信小程序，获取地址Id
+func (a *AddressService) GetId(uid string) uint64 {
+	var id uint64
 	global.Db.Table("address").Select("id").
 		      Where("is_default = ? and user_id = ?", 1, uid).Take(&id)
 	return id
 }
 
-// AppGetUpdateInfo 获取更新信息
-func (a *Address) AppGetUpdateInfo(id uint) models.AppAddressUpdateInfo {
+// GetInfo 微信小程序，获取更新信息
+func (a *AddressService) GetInfo(id uint) models.AppAddressUpdateInfo {
 	var updateInfo models.AppAddressUpdateInfo
 	global.Db.Table("address").First(&updateInfo, id)
 	return updateInfo
 }
 
-// AppGetList 获取地址列表
-func (a *Address) AppGetList(uid string) []models.AppAddressList {
+// GetList 微信小程序，获取地址列表
+func (a *AddressService) GetList(uid string) []models.AppAddressList {
 	aList := make([]models.AppAddressList, 0)
 	global.Db.Table("address").Where("user_id = ?", uid).Order("is_default").Find(&aList)
 	return aList

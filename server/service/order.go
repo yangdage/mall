@@ -1,7 +1,6 @@
 package service
 
 import (
-	"fmt"
 	"mall.com/common"
 	"mall.com/global"
 	"mall.com/models"
@@ -9,92 +8,108 @@ import (
 	"strings"
 )
 
-type Order struct {
-	Id             uint    `gorm:"primaryKey"`
-	ProductItem    string  `gorm:"product_item"`
-	TotalPrice     float64 `gorm:"total_price"`
-	Status         string  `gorm:"status"`
-	CourierName    string  `gorm:"courier_name"`
-	ShipmentNumber uint    `gorm:"shipment_number"`
-	AddressId      uint    `gorm:"address_id"`
-	UserId         string  `gorm:"user_id"`
-	UserName       string  `gorm:"user_name"`
-	AdminId        uint    `gorm:"admin_id"`
-	Created        string  `gorm:"created"`
-	Updated        string  `gorm:"updated"`
+var cart CartService
+var address AddressService
+
+type WebOrderService struct {
 }
 
-type OrderSet struct {
-	Id              uint   `gorm:"id"`
-	PaymentOvertime int64  `gorm:"payment_overtime"`
-	ReceiveOvertime int64  `gorm:"receive_overtime"`
-	FinishOvertime  int64  `gorm:"finish_overtime"`
-	AdminId         uint   `gorm:"admin_id"`
-	Created         string `gorm:"created"`
-	Updated         string `gorm:"updated"`
+type AppOrderService struct {
 }
 
-var cart *Cart
-var address *Address
-
-// AppCreate 创建订单
-func (o *Order) AppCreate(param models.AppOrderFormParam) int64 {
-	info := cart.AppGetInfo(param.UserId)
-	pids := make([]string, 0)
-	for _, item := range info.CartItem {
-		pids = append(pids, strconv.Itoa(int(item.Id)))
-	}
-	pidsItem := strings.Join(pids, ",")
-	order := Order{
-		ProductItem: pidsItem,
-		TotalPrice:  info.TotalPrice,
-		Status:      param.Status,
-		AddressId:   address.AppGetId(param.UserId),
-		UserId:      param.UserId,
-		AdminId:     100030,
-		UserName:    param.NickName,
-		Created:     common.NowTime(),
-	}
-	return global.Db.Create(&order).RowsAffected
+// Delete 后台管理前端，删除订单
+func (o *WebOrderService) Delete(param models.WebOrderDeleteParam) int64 {
+	return global.Db.Delete(&models.Order{}, param.Id).RowsAffected
 }
 
-// WebDelete 删除订单
-func (o *Order) WebDelete(id uint) int64 {
-	return global.Db.Delete(&Order{}, id).RowsAffected
-}
-
-// WebUpdate 更新订单
-func (o *Order) WebUpdate(param models.WebOrderFormParam) int64 {
-	order := Order{
+// Update 后台管理前端，更新订单
+func (o *WebOrderService) Update(param models.WebOrderUpdateParam) int64 {
+	order := models.Order{
 		Id:             param.Id,
 		Status:         param.Status,
-		CourierName:    param.CourierName,
-		ShipmentNumber: param.ShipmentNumber,
 		Updated:        common.NowTime(),
 	}
 	return global.Db.Model(&order).Updates(order).RowsAffected
 }
 
-// WebGetList 获取订单列表
-func (o *Order) WebGetList(page models.Page, param models.WebOrderFormParam) ([]models.WebOrderList, int64) {
+
+// GetList 后台管理前端，获取订单列表
+func (o *WebOrderService) GetList(param models.WebOrderListParam) ([]models.WebOrderList, int64) {
 	orderList := make([]models.WebOrderList, 0)
-	query := &Order{
-		Id:      param.Id,
-		Status:  param.Status,
-		AdminId: param.AdminId,
+	query := &models.Order{
+		Id:     param.Id,
+		Status: param.Status,
 	}
-	rows := common.RestPage(page, "order", query, &orderList, &[]Order{})
+	rows := common.RestPage(param.Page, "order", query, &orderList, &[]models.Order{})
 	return orderList, rows
 }
 
-// AppGetList 获取订单列表
-func (o *Order) AppGetList(param models.AppOrderFormParam) []models.AppOrderListInfo {
+// GetDetail 后台管理前端，获取订单详情
+func (o *WebOrderService) GetDetail(param models.WebOrderDetailParam) (od models.WebOrderDetail) {
+	var order models.Order
+	var address models.Address
+	var productItem []models.WebProductItem
+
+	// 查询订单信息与地址信息
+	global.Db.First(&order, param.Id)
+	global.Db.First(&address, order.AddressId)
+
+	// 查询订单中包含的商品信息
+	idList := strings.Split(order.ProductItem, ",")
+	productIdList := make([]uint64, 0)
+	for _, id := range idList {
+		pid, _ := strconv.Atoi(id)
+		if pid != 0 {
+			productIdList = append(productIdList, uint64(pid))
+		}
+	}
+	global.Db.Table("product").Find(&productItem, productIdList)
+	orderDetail := models.WebOrderDetail{
+		Id:              order.Id,
+		Created:         order.Created,
+		NickName:        order.NickName,
+		Status:          order.Status,
+		TotalPrice:      order.TotalPrice,
+		Name:            address.Name,
+		Mobile:          address.Mobile,
+		PostalCode:      address.PostalCode,
+		Province:        address.Province,
+		City:            address.City,
+		District:        address.District,
+		DetailedAddress: address.DetailedAddress,
+		ProductItem:     productItem,
+	}
+	return orderDetail
+}
+
+// Submit 微信小程序，提交订单
+func (o *AppOrderService) Submit(param models.AppOrderSubmitParam) int64 {
+	info := cart.GetInfo(models.AppCartQueryParam{UserId: param.UserId})
+	pids := make([]string, 0)
+	for _, item := range info.CartItem {
+		pids = append(pids, strconv.Itoa(int(item.Id)))
+	}
+	pidsItem := strings.Join(pids, ",")
+	order := models.Order{
+		ProductItem: pidsItem,
+		TotalPrice:  info.TotalPrice,
+		Status:      param.Status,
+		AddressId:   address.GetId(param.UserId),
+		UserId:      param.UserId,
+		NickName:    param.NickName,
+		Created:     common.NowTime(),
+	}
+	return global.Db.Create(&order).RowsAffected
+}
+
+// GetList 微信小程序，获取订单列表
+func (o *AppOrderService) GetList(param models.AppOrderQueryParam) []models.AppOrderListInfo {
 
 	// 查询满足特定条件的订单
-	orderList := make([]Order, 0)
-	query := &Order{
-		UserId:  param.UserId,
-		Status:  param.Status,
+	orderList := make([]models.Order, 0)
+	query := &models.Order{
+		UserId: param.UserId,
+		Status: param.Status,
 	}
 	global.Db.Table("order").Where(query).Find(&orderList)
 	orderInfoList := make([]models.AppOrderListInfo, 0)
@@ -122,67 +137,4 @@ func (o *Order) AppGetList(param models.AppOrderFormParam) []models.AppOrderList
 	return orderInfoList
 }
 
-// WebGetDetail 获取订单详情
-func (o *Order) WebGetDetail(orderId uint) (od models.WebOrderDetail) {
-	var order Order
-	var address Address
-	var productItem []models.WebProductItem
 
-	// 查询订单信息
-	global.Db.First(&order, orderId)
-	// 查询地址信息
-	global.Db.First(&address, order.AddressId)
-
-	// 查询商品信息
-	sList := strings.Split(order.ProductItem, ",")
-	idList := make([]uint, 0)
-	for _, pid := range sList {
-		id, _ := strconv.Atoi(pid)
-		if id != 0 {
-			i := uint(id)
-			idList = append(idList, i)
-		}
-	}
-	global.Db.Table("product").Find(&productItem, idList)
-	orderDetail := models.WebOrderDetail{
-		Id:              order.Id,
-		Created:         order.Created,
-		UserName:        order.UserName,
-		Status:          order.Status,
-		TotalPrice:      order.TotalPrice,
-		Name:            address.Name,
-		Mobile:          address.Mobile,
-		PostalCode:      address.PostalCode,
-		Province:        address.Province,
-		City:            address.City,
-		District:        address.District,
-		DetailedAddress: address.DetailedAddress,
-		ProductItem:     productItem,
-	}
-	return orderDetail
-}
-
-// WebSave 保存订单设置信息
-func (o *OrderSet) WebSave(param models.WebOrderSetFormParam) int64 {
-	orderSet := OrderSet{
-		PaymentOvertime: param.PaymentOvertime,
-		ReceiveOvertime: param.ReceiveOvertime,
-		FinishOvertime:  param.FinishOvertime,
-	}
-	if row := global.Db.First(&OrderSet{}, param.Id).RowsAffected; row > 0 {
-		orderSet.Id = param.Id
-		orderSet.Updated = common.NowTime()
-		fmt.Println(orderSet)
-		return global.Db.Model(&orderSet).Updates(&orderSet).RowsAffected
-	}
-	orderSet.AdminId = param.AdminId
-	orderSet.Created = common.NowTime()
-	return global.Db.Create(&orderSet).RowsAffected
-}
-
-// WebGetInfo 获取订单设置信息
-func (o *OrderSet) WebGetInfo(id uint) models.WebOrderSetInfo {
-	var info models.WebOrderSetInfo
-	global.Db.Table("order_set").Where("admin_id = ?", id).First(&info)
-	return info
-}

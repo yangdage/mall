@@ -10,7 +10,7 @@ mysql:
 
 # 图片路径配置
 upload:
-  savePath: /Users/zchengo/resource/images/
+  savePath: /Users/xuzhicheng/resource/images/
   accessUrl: http://localhost:8000/image/
 
 # JWT配置
@@ -19,5 +19,5 @@ jwt:
 
 # 微信小程序相关配置
 code2Session:
-  appId: wx8c27b4b839985f63
-  appSecret: bs07bdx8132784a7fs48c7dfbc3c5016
+  appId: wx8cs7c0b432128xf63
+  appSecret: ba07bab810x484a5fe1bc3s5026

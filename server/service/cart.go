@@ -1,57 +1,58 @@
 package service
 
 import (
-	"context"
-	"fmt"
 	"mall.com/global"
 	"mall.com/models"
 	"strconv"
+	"strings"
 )
 
-var ctx = context.Background()
-
-type Cart struct {
+type CartService struct {
 
 }
 
-func (c *Cart) AppAdd(pid uint, uid string) int64 {
-	key := fmt.Sprintf("user:%s:cart", uid)
-	if count := global.Rdb.SAdd(ctx, key, pid).Val(); count > 0 {
-		return count
+// Add 微信小程序，添加购物车
+func (c *CartService) Add(param models.AppCartAddParam) bool {
+	key := strings.Join([]string{"user", param.UserId, "cart"}, ":")
+	pid := strconv.Itoa(int(param.ProductId))
+	return global.Rdb.HSetNX(ctx, key, pid, param.ProductCount).Val()
+}
+
+// Delete 微信小程序，删除购物车中的某项商品
+func (c *CartService) Delete(param models.AppCartDeleteParam) int64 {
+	key := strings.Join([]string{"user", param.UserId, "cart"}, ":")
+	return global.Rdb.HDel(ctx, key, param.ProductId).Val()
+}
+
+// Clear 微信小程序，清楚购物车中的商品
+func (c *CartService) Clear(param models.AppCartClearParam) int64 {
+	key := strings.Join([]string{"user", param.UserId, "cart"}, ":")
+	pidsAndCounts := global.Rdb.HGetAll(ctx, key).Val()
+	var rows int64
+	for id, _ := range pidsAndCounts {
+		rows += global.Rdb.HDel(ctx, key, id).Val()
 	}
-	return 0
+	return rows
 }
 
-func (c *Cart) AppDelete(pid uint, uid string) int64 {
-	key := fmt.Sprintf("user:%s:cart", uid)
-	if count := global.Rdb.SRem(ctx, key, pid).Val(); count > 0 {
-		return count
-	}
-	return 0
-}
-
-func (c *Cart) AppClear(uid string) int64 {
-	key := fmt.Sprintf("user:%s:cart", uid)
-	pids := global.Rdb.SMembers(ctx, key).Val()
-	if count := global.Rdb.SRem(ctx, key, pids).Val(); count > 0 {
-		return count
-	}
-	return 0
-}
-
-func (c *Cart) AppGetInfo(uid string) models.AppCartInfo {
+// GetInfo 微信小程序，获取购物车信息
+func (c *CartService) GetInfo(param models.AppCartQueryParam) models.AppCartInfo {
 	var cartInfo models.AppCartInfo
-	key := fmt.Sprintf("user:%s:cart", uid)
-	pids := global.Rdb.SMembers(ctx, key).Val()
+	key := strings.Join([]string{"user", param.UserId, "cart"}, ":")
+	productIdsAndCounts := global.Rdb.HGetAll(ctx, key).Val()
 	productIds := make([]uint, 0)
-	for _, pid := range pids {
+	idsAndCounts := make(map[uint64]int, 0)
+	for pid, pcount := range productIdsAndCounts {
 		id, _ := strconv.Atoi(pid)
+		count, _ := strconv.Atoi(pcount)
 		productIds = append(productIds, uint(id))
+		idsAndCounts[uint64(id)] = count
 	}
 	if len(productIds) > 0 {
 		global.Db.Table("product").Find(&cartInfo.CartItem, productIds)
-		for _, item := range cartInfo.CartItem {
-			cartInfo.TotalPrice += item.Price
+		for index, item := range cartInfo.CartItem {
+			cartInfo.CartItem[index].Count = idsAndCounts[item.Id]
+			cartInfo.TotalPrice = cartInfo.TotalPrice + item.Price * float64(idsAndCounts[item.Id])
 		}
 		return cartInfo
 	}

@@ -1,107 +1,90 @@
 package api
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"mall.com/models"
 	"mall.com/response"
 	"mall.com/service"
 )
 
-var order service.Order
-var orderSet service.OrderSet
+var webOrder service.WebOrderService
+var appOrder service.AppOrderService
 
-// AppCreateOrder 创建订单
-func AppCreateOrder(c *gin.Context) {
-	var param models.AppOrderFormParam
-	if err := c.ShouldBind(&param); err != nil {
-		response.Failed("参数无效", c)
-		return
-	}
-	count := order.AppCreate(param)
-	if count > 0 {
-		response.Success("创建成功", count, c)
-		return
-	}
-	response.Failed("创建失败", c)
-}
-
-// WebDeleteOrder 删除订单
+// WebDeleteOrder 后台管理前端，删除订单
 func WebDeleteOrder(c *gin.Context) {
-	var key models.PrimaryKey
-	_ = c.Bind(&key)
-	count := order.WebDelete(key.Id)
-	if count > 0 {
+	var param models.WebOrderDeleteParam
+	if err := c.ShouldBind(&param); err != nil {
+		response.Failed("请求参数无效", c)
+		return
+	}
+	if count := webOrder.Delete(param); count > 0 {
 		response.Success("删除成功", count, c)
 		return
 	}
 	response.Failed("删除失败", c)
 }
 
-// WebUpdateOrder 更新订单
+// WebUpdateOrder 后台管理前端，更新订单
 func WebUpdateOrder(c *gin.Context) {
-	var param models.WebOrderFormParam
-	_ = c.ShouldBindJSON(&param)
-	count := order.WebUpdate(param)
-	if count > 0 {
+	var param models.WebOrderUpdateParam
+	if err := c.ShouldBind(&param); err != nil {
+		response.Failed("请求参数无效", c)
+		return
+	}
+	if count := webOrder.Update(param); count > 0 {
 		response.Success("更新成功", count, c)
 		return
 	}
 	response.Failed("更新失败", c)
 }
 
-// WebGetOrderList 获取订单列表
+// WebGetOrderList 后台管理前端，获取订单列表
 func WebGetOrderList(c *gin.Context) {
-	var page models.Page
-	var param models.WebOrderFormParam
-	_ = c.Bind(&page)
-	_ = c.Bind(&param)
-	orderList, row := order.WebGetList(page, param)
-	response.SuccessPage("操作成功", orderList, row, c)
-}
-
-// AppGetOrderList 获取订单列表
-func AppGetOrderList(c *gin.Context) {
-	var param models.AppOrderFormParam
+	var param models.WebOrderListParam
 	if err := c.ShouldBind(&param); err != nil {
-		response.Failed("参数无效", c)
+		response.Failed("请求参数无效", c)
 		return
 	}
-	orderList := order.AppGetList(param)
-	response.Success("操作成功", orderList, c)
+	productList, rows := webOrder.GetList(param)
+	response.SuccessPage("查询成功", productList, rows, c)
 }
 
-// WebGetOrderDetail 获取订单详情
+// WebGetOrderDetail 后台管理前端，获取订单详情
 func WebGetOrderDetail(c *gin.Context) {
-	var param models.PrimaryKey
-	_ = c.Bind(&param)
-	orderDetail := order.WebGetDetail(param.Id)
-	response.Success("操作成功", orderDetail, c)
-}
-
-// WebSaveOrderSet 创建订单设置信息
-func WebSaveOrderSet(c *gin.Context) {
-	var param models.WebOrderSetFormParam
+	var param models.WebOrderDetailParam
 	if err := c.ShouldBind(&param); err != nil {
-		response.Failed("参数无效", c)
+		response.Failed("请求参数无效", c)
 		return
 	}
-	count := orderSet.WebSave(param)
-	if count > 0 {
-		response.Success("保存成功", count, c)
-		return
-	}
-	response.Failed("保存失败", c)
+	productDetail := webOrder.GetDetail(param)
+	response.Success("查询成功", productDetail, c)
 }
 
-// WebGetOrderSetInfo 获取订单设置信息
-func WebGetOrderSetInfo(c *gin.Context) {
-	var key models.PrimaryKey
-	if err := c.ShouldBind(&key); err != nil {
-		response.Failed("参数无效", c)
-		fmt.Println(err)
+// AppCreateOrder 微信小程序，提交订单
+func AppCreateOrder(c *gin.Context) {
+	var param models.AppOrderSubmitParam
+	if err := c.ShouldBind(&param); err != nil {
+		response.Failed("请求参数无效", c)
 		return
 	}
-	info := orderSet.WebGetInfo(key.Id)
-	response.Success("操作成功", info, c)
+	if count := appOrder.Submit(param); count > 0 {
+		response.Success("提交成功", count, c)
+		return
+	}
+	response.Failed("提交失败", c)
 }
+
+// AppGetOrderList 微信小程序，获取订单列表信息
+func AppGetOrderList(c *gin.Context) {
+	var param models.AppOrderQueryParam
+	if err := c.ShouldBind(&param); err != nil {
+		response.Failed("请求参数无效", c)
+		return
+	}
+	orderList := appOrder.GetList(param)
+	response.Success("查询成功", orderList, c)
+}
+
+
+
+

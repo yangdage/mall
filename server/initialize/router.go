@@ -20,8 +20,8 @@ func Router() {
 
 	// 后台管理员前端接口
 	web := engine.Group("/web")
-	{
 
+	{
 		// 用户登录API
 		web.GET("/captcha", api.WebGetCaptcha)
 		web.POST("/login", api.WebUserLogin)
@@ -31,13 +31,6 @@ func Router() {
 
 		// 文件上传API
 		web.POST("/upload", api.WebFileUpload)
-
-		// 品牌管理API
-		web.POST("/brand/create", api.WebCreateBrand)
-		web.DELETE("/brand/delete", api.WebDeleteBrand)
-		web.PUT("/brand/update", api.WebUpdateBrand)
-		web.GET("/brand/list", api.WebGetBrandList)
-		web.GET("/brand/option", api.WebGetBrandOption)
 
 		// 类目管理API
 		web.POST("/category/create", api.WebCreateCategory)
@@ -50,6 +43,7 @@ func Router() {
 		web.POST("/product/create", api.WebCreateProduct)
 		web.DELETE("/product/delete", api.WebDeleteProduct)
 		web.PUT("/product/update", api.WebUpdateProduct)
+		web.PUT("/product/status/update", api.WebUpdateProductStatus)
 		web.GET("/product/info", api.WebGetProductInfo)
 		web.GET("/product/list", api.WebGetProductList)
 
@@ -58,49 +52,53 @@ func Router() {
 		web.PUT("/order/update", api.WebUpdateOrder)
 		web.GET("/order/list", api.WebGetOrderList)
 		web.GET("/order/detail", api.WebGetOrderDetail)
-		web.POST("/order/set/save", api.WebSaveOrderSet)
-		web.GET("/order/set/info", api.WebGetOrderSetInfo)
-
-		// 用户管理API
-		web.DELETE("/user/delete", api.WebDeleteUser)
-		web.PUT("/user/update", api.WebUpdateUser)
-		web.GET("/user/list", api.WebGetUserList)
 
 		// 数据统计API
-		web.GET("/statistics/info", api.WebGetStatisticsInfo)
-		web.GET("/today/order/info", api.WebGetTodayOrderInfo)
-		web.GET("/week/order/info", api.WebGetWeekInfo)
+		web.GET("/data/overview/info", api.WebGetDataOverviewInfo)
+		web.GET("/today/order/data/info", api.WebGetTodayOrderDataInfo)
+		web.GET("/week/data/info", api.WebGetWeekDataInfo)
 	}
 
 	// 微信小程序用户接口
 	app := engine.Group("/app")
+
 	{
 		app.POST("/login", api.AppUserLogin)
 
+		// 商品API
 		app.GET("/product/list", api.AppGetProductList)
+		app.GET("/product/search", api.AppGetProductSearchList)
 		app.GET("/product/detail", api.AppGetProductDetail)
 
-		app.GET("/cart/add", api.AppAddCart)
-		app.GET("/cart/delete", api.AppDeleteCart)
-		app.GET("/cart/clear", api.AppClearCart)
+		// 分类API
+		app.GET("/category/option", api.AppGetCategoryOption)
+
+		// 购物车API
+		app.POST("/cart/add", api.AppAddCart)
+		app.DELETE("/cart/delete", api.AppDeleteCart)
+		app.DELETE("/cart/clear", api.AppClearCart)
 		app.GET("/cart/info", api.AppGetCartInfo)
 
+		// 商品订单API
 		app.POST("/order/create", api.AppCreateOrder)
 		app.GET("/order/list", api.AppGetOrderList)
 
+		// 收货地址API
 		app.POST("/address/add", api.AppAddAddress)
-		app.GET("/address/delete", api.AppDeleteAddress)
-		app.GET("/address/update", api.AppUpdateAddress)
+		app.DELETE("/address/delete", api.AppDeleteAddress)
+		app.PUT("/address/update", api.AppUpdateAddress)
 		app.GET("/address/info", api.AppGetAddressUpdateInfo)
 		app.GET("/address/list", api.AppGetAddressList)
 
+		// 商品收藏API
 		app.POST("/collection/add", api.AppAddCollection)
-		app.GET("/collection/delete", api.AppDeleteCollection)
+		app.DELETE("/collection/delete", api.AppDeleteCollection)
 		app.GET("/collection/list", api.AppGetCollectionList)
-
-		app.GET("/footmark/add", api.AppAddFootmark)
-		app.GET("/footmark/delete", api.AppDeleteFootmark)
-		app.GET("/footmark/list", api.AppGetFootmarknList)
+		//
+		// 商品浏览记录API
+		app.POST("/browse/save", api.AppSaveBrowseRecord)
+		app.DELETE("/browse/delete", api.AppDeleteBrowseRecord)
+		app.GET("/browse/list", api.AppGetBrowseRecordList)
 	}
 
 	// 启动、监听端口

@@ -7,59 +7,60 @@ import (
 	"mall.com/service"
 )
 
-var cart service.Cart
+var cart service.CartService
 
+// AppAddCart 微信小程序，添加购物车
 func AppAddCart(c *gin.Context) {
-	var param models.AppCartParam
+	var param models.AppCartAddParam
 	if err := c.ShouldBind(&param); err != nil {
-		response.Failed("参数无效", c)
+		response.Failed("请求参数无效", c)
 		return
 	}
-	count := cart.AppAdd(param.ProductId, param.UserId)
-	if count > 0 {
-		response.Success("添加成功", count, c)
+	if cart.Add(param) {
+		response.Success("添加成功", 1, c)
 		return
 	}
-	response.Failed("添加失败", c)
+	response.Failed("已添加", c)
 }
 
+// AppDeleteCart 微信小程序，删除购物车中的商品
 func AppDeleteCart(c *gin.Context) {
-	var param models.AppCartParam
+	var param models.AppCartDeleteParam
 	if err := c.ShouldBind(&param); err != nil {
-		response.Failed("参数无效", c)
+		response.Failed("请求参数无效", c)
 		return
 	}
-	count := cart.AppDelete(param.ProductId, param.UserId)
-	if count > 0 {
+	if count := cart.Delete(param); count > 0 {
 		response.Success("删除成功", count, c)
 		return
 	}
 	response.Failed("删除失败", c)
 }
 
+// AppDeleteCart 微信小程序，清除购物车中的商品
 func AppClearCart(c *gin.Context) {
-	var param models.AppCartParam
+	var param models.AppCartClearParam
 	if err := c.ShouldBind(&param); err != nil {
-		response.Failed("参数无效", c)
+		response.Failed("请求参数无效", c)
 		return
 	}
-	count := cart.AppClear(param.UserId)
-	if count > 0 {
+	if count := cart.Clear(param); count > 0 {
 		response.Success("清除成功", count, c)
 		return
 	}
 	response.Failed("清除失败", c)
 }
 
+// AppGetCartInfo 微信小程序，获取购物车中信息
 func AppGetCartInfo(c *gin.Context) {
-	var param models.AppCartParam
+	var param models.AppCartQueryParam
 	if err := c.ShouldBind(&param); err != nil {
-		response.Failed("参数无效", c)
+		response.Failed("请求参数无效", c)
 		return
 	}
-	info := cart.AppGetInfo(param.UserId)
+	info := cart.GetInfo(param)
 	if len(info.CartItem) == 0 {
 		response.Success("购物车竟然是空的", info, c)
 	}
-	response.Success("操作成功", info, c)
+	response.Success("查询成功", info, c)
 }
