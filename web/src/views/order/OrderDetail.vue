@@ -7,13 +7,12 @@
           <i class="el-icon-time"></i>
           <span style="margin-left: 10px">{{ order.created }}</span>
         </el-descriptions-item>
-        <el-descriptions-item label="用户账号">{{order.username}}</el-descriptions-item>
+        <el-descriptions-item label="用户昵称">{{order.nickName}}</el-descriptions-item>
         <el-descriptions-item label="订单状态" :span="2">
           <el-tag v-if="order.status === '待付款'" size="mini" type="danger">待付款</el-tag>
-          <el-tag v-if="order.status === '待发货'" size="mini" type="success">待发货</el-tag>
-          <el-tag v-if="order.status === '已发货'" size="mini" type="primary">已发货</el-tag>
+          <el-tag v-if="order.status === '待发货'" size="mini" type="primary">待发货</el-tag>
+          <el-tag v-if="order.status === '配送中'" size="mini" type="primary">配送中</el-tag>
           <el-tag v-if="order.status === '待收货'" size="mini" type="primary">待收货</el-tag>
-          <el-tag v-if="order.status === '待评价'" size="mini" type="primary">待评价</el-tag>
           <el-tag v-if="order.status === '已完成'" size="mini" type="success">已完成</el-tag>
         </el-descriptions-item>
         <el-descriptions-item label="合计" :span="2">
@@ -40,13 +39,13 @@
               height="280"
               stripe>
             <el-table-column
-                prop="imageUrl"
+                prop="mainImage"
                 label="主图"
                 width="100">
               <template #default="scope">
                 <el-image
                     style="width: 50px; height: 50px"
-                    :src="scope.row.imageUrl"></el-image>
+                    :src="scope.row.mainImage"></el-image>
               </template>
             </el-table-column>
             <el-table-column
@@ -82,7 +81,7 @@ export default {
       order: {
         id: 0,
         created: '',
-        username: '',
+        nickName: '',
         status: '',
         totalPrice: '',
         name: '',
@@ -101,6 +100,8 @@ export default {
     this.order.totalPrice = this.$route.params.totalPrice
   },
   methods: {
+
+    // 获取订单详情
     getOrderDetail() {
       this.$axios.get('/order/detail',{
         params: {
@@ -110,7 +111,7 @@ export default {
         let res = response.data.data;
         this.order.id =  res.id;
         this.order.created = res.created;
-        this.order.username = res.username;
+        this.order.nickName = res.nickName;
         this.order.status = res.status;
         this.order.totalPrice = res.totalPrice;
         this.order.name = res.name;

@@ -2,15 +2,12 @@ import {createRouter, createWebHashHistory} from 'vue-router';
 import Login from "../views/Login";
 import OrderList from "../views/order/OrderList";
 import AddProduct from "../views/product/AddProduct";
-import BrandManage from "../views/product/BrandManage";
 import ProductList from "../views/product/ProductList";
 import CategoryManage from "../views/product/CategoryManage";
 import Home from "../views/Home";
 import ResultPage from "../views/result/ResultPage";
-import UserManage from "../views/user/UserManage";
 import OrderDetail from "../views/order/OrderDetail";
 import EditProduct from "../views/product/EditProduct";
-import ResetPassword from "../views/user/ResetPassword";
 import MainPage from "../views/index/MainPage";
 import OrderSet from "../views/order/OrderSet";
 
@@ -50,11 +47,6 @@ const routes = [
                 component: CategoryManage,
             },
             {
-                path: '/product/brand',
-                name: 'productBrand',
-                component: BrandManage,
-            },
-            {
                 path: '/order/list',
                 name: 'orderList',
                 component: OrderList,
@@ -68,16 +60,6 @@ const routes = [
                 path: '/order/detail',
                 name: 'orderDetail',
                 component: OrderDetail,
-            },
-            {
-                path: '/user/manage',
-                name: 'userManage',
-                component: UserManage,
-            },
-            {
-                path: '/reset/password',
-                name: 'ResetPassword',
-                component: ResetPassword,
             },
             {
                 path: '/result/page',

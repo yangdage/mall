@@ -37,27 +37,28 @@
         </el-col>
       </el-row>
     </div>
-    <div style="padding: 30px;">
-      <el-row :gutter="30">
+    <div style="padding: 30px">
+      <el-row :span="24" :gutter="30">
         <el-col :span="8">
-          <el-card class="box-card" shadow="never">
-              <el-descriptions title="今日订单" :column="1" border>
-                <el-descriptions-item v-for="item in todayOrder"
-                                      :key="item.title"
-                                      :label="item.title">
-                  <span class="span-data">{{item.data}}</span>
+          <div class="main-card">
+            <div class="main-card-title"><h4>今日订单</h4></div>
+            <div class="main-card-content">
+              <el-descriptions direction="vertical" :column="2" border>
+                <el-descriptions-item v-for="item in todayOrder" :key="item.title" :label="item.title">
+                  {{item.data}}
                 </el-descriptions-item>
-              </el-descriptions>
-          </el-card>
+              </el-descriptions><br>
+              <el-alert title="订单数据实时统计，更新于 8：32" type="info" show-icon />
+            </div>
+          </div>
         </el-col>
         <el-col :span="16">
-          <el-card class="box-card" shadow="never">
-            <el-descriptions title="每周订单总览" :column="1">
-              <el-descriptions-item>
-                <div id="main" style="width: 100%;height:300px;"></div>
-              </el-descriptions-item>
-            </el-descriptions>
-          </el-card>
+          <div class="main-card">
+            <div class="main-card-title"><h4>每周数据总览</h4></div>
+            <div class="main-card-content">
+              <div id="main" style="width: 100%;height:300px;"></div>
+            </div>
+          </div>
         </el-col>
       </el-row>
     </div>
@@ -77,36 +78,31 @@ export default {
       },
       todayOrder: [
         {
-          title: '待付款订单',
+          title: '待付款',
           data: ''
         },
         {
-          title: '待发货订单',
+          title: '待发货',
           data: ''
         },
         {
-          title: '已发货订单',
+          title: '配送中',
           data: ''
         },
         {
-          title: '待收货订单',
+          title: '待收货',
           data: ''
         },
         {
-          title: '待评价订单',
-          data: ''
-        },
-        {
-          title: '已完成订单',
+          title: '已完成',
           data: ''
         },
       ],
     }
   },
   mounted() {
-    this.getInfo()
+    this.getDataOverviewInfo()
     this.getTodayOrderInfo();
-
     const echarts = require('echarts/lib/echarts');
     require('echarts/lib/component/title');
     require('echarts/lib/component/toolbox');
@@ -114,16 +110,12 @@ export default {
     require('echarts/lib/component/grid');
     require('echarts/lib/component/legend');
     require('echarts/lib/chart/line');
-
     let chartDom = document.getElementById('main');
     let myChart = echarts.init(chartDom);
     let option;
 
-    this.$axios.get("/week/order/info", {
-      params: {
-        id: localStorage.getItem("uid")
-      }
-    }).then(response => {
+    // 获取本周数据总览
+    this.$axios.get("/week/data/info").then(response => {
       if (response.data.code === 200) {
         let res = response.data.data
         option = {
@@ -207,37 +199,30 @@ export default {
     })
   },
   methods: {
-    getInfo() {
-      // 获取商品数、订单量、交易金额、访客数
-      this.$axios.get("/statistics/info", {
-        params: {
-          id: localStorage.getItem("uid")
-        }
-      }).then(response => {
+
+    // 获取数据统计信息（商品数、订单量、交易金额）
+    getDataOverviewInfo() {
+      this.$axios.get("/data/overview/info").then(response => {
         if (response.data.code === 200) {
           let res = response.data.data;
           this.statistics.goodsCount = res.goodsCount;
           this.statistics.orderCount = res.orderCount;
           this.statistics.amount = res.amount;
-          this.statistics.visitorCount = res.visitorCount;
-          if (res.goodsCount === 0 || res.orderCount === 0 || res.amount === 0 || res.visitorCount === 0) {
-            this.statistics.goodsCount = '__';
+          if (res.goodsCount === 0 || res.orderCount === 0 || res.amount === 0 ) {
+            this.statistics.goodsCount = '--';
             this.statistics.orderCount = '--';
             this.statistics.amount = '--';
-            this.statistics.visitorCount = '--';
           }
         }
       })
     },
+
+    // 获取今日订单数据统计信息
     getTodayOrderInfo() {
-      this.$axios.get("/today/order/info", {
-        params: {
-          id: localStorage.getItem("uid")
-        }
-      }).then(response => {
+      this.$axios.get("/today/order/data/info").then(response => {
         if (response.data.code === 200) {
           let res = response.data.data.data;
-          for (let i = 0; i < 6; i++) {
+          for (let i = 0; i < 5; i++) {
             this.todayOrder[i].data = res[i]
           }
         }
@@ -268,13 +253,29 @@ export default {
   padding-left: 10px;
   padding-top: 8px;
 }
-.span-data{
-  color: #409EFF;
+
+.main-card {
+  float: left;
+  width: 100%;
+  height: auto;
+  border-radius: 5px;
+  background-color: #FAFAFA;
 }
 
-.box-card {
-  background-color: #FAFAFA;
-  height: 420px;
-  border: none;
+.main-card-title {
+  float: left;
+  padding: 12px;
+}
+
+.main-card-title h4 {
+  padding-left: 5px;
+  border-left: 5px solid dodgerblue;
+}
+
+.main-card-content {
+  float: left;
+  width: 90%;
+  padding: 5%;
+  height: auto;
 }
 </style>

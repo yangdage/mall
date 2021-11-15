@@ -1,33 +1,36 @@
 <template>
-  <el-main>
-    <!-- 查询、创建模块 -->
-    <el-card shadow="never" class="card-box">
-      <el-form ref="form" :model="sort">
-        <el-form-item>
-          <el-input size="small"
-                    v-model="selectCondition.name"
-                    style="width: 20%;" placeholder="按类目名称查询"></el-input>
-          <el-select v-model="selectCondition.value" size="small" style="width: 20%;margin-left: 10px;"
-                     placeholder="按类目等级查询">
-            <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
-            </el-option>
-          </el-select>
-          <el-button size="small" type="primary" @click="queryList" style="margin-left: 28px;">查询</el-button>
-          <el-button size="small" type="primary" @click="createClick" style="margin-left: 18px;">新建</el-button>
-        </el-form-item>
-      </el-form>
-    </el-card>
-    <!-- 类目列表模块 -->
-      <el-card shadow="never" style="border-bottom: none;">
+  <div>
+    <el-form ref="form" :model="queryCondition" label-width="100px">
+      <div class="main-card">
+        <div class="main-card-title"><h4>查询条件</h4></div>
+        <div class="main-card-content">
+          <el-form-item label="类目名称">
+            <el-input size="small" v-model="queryCondition.name"/>
+          </el-form-item>
+        </div>
+        <div class="main-card-content">
+          <el-form-item label="类目等级">
+            <el-select v-model="queryCondition.value" size="small">
+              <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"/>
+            </el-select>
+          </el-form-item>
+        </div>
+        <div class="main-card-content">
+          <el-form-item>
+            <el-button size="small" type="primary" @click="queryList" style="margin-left: 28px;">查询</el-button>
+            <el-button size="small" type="primary" @click="createClick" style="margin-left: 18px;">新建</el-button>
+          </el-form-item>
+        </div>
+      </div>
+    </el-form>
+    <div class="main-card">
+      <div class="main-card-title"><h4>类目列表</h4></div>
+      <div class="table-card-content">
         <el-table
             :data="tableData"
             @selection-change="handleSelectionChange"
-            stripe
-            style="width: 100%" border>
+            height="360"
+            style="width: 100%" border stripe>
           <el-table-column
               type="selection"
               width="55">
@@ -62,32 +65,31 @@
               <el-button
                   size="mini"
                   type="primary"
+                  v-if="scope.row.level === 1"
                   @click="nextLevelCategory(scope.$index, scope.row)">下一级类目
               </el-button>
               <el-button
                   size="mini"
                   type="danger"
-                  v-if="scope.row.level === 1"
                   @click="deleteCategory(scope.$index, scope.row)">删除
               </el-button>
             </template>
           </el-table-column>
         </el-table>
-      </el-card>
-    <!-- 分页查询模块 -->
-      <el-card shadow="never" style="border-top: none;">
-        <el-pagination
-            background
-            @current-change="handleCurrentChange"
-            @prev-click="handleCurrentChangePrev"
-            @next-click="handleCurrentChangeNext"
-            :currentPage="currentPage"
-            :page-size="size"
-            layout="total, prev, pager, next"
-            :total="total">
-        </el-pagination>
-      </el-card>
-    <!-- 弹出框模块 -->
+      </div>
+    </div>
+    <div class="pagination-card">
+      <el-pagination
+          background
+          @current-change="handleCurrentChange"
+          @prev-click="handleCurrentChangePrev"
+          @next-click="handleCurrentChangeNext"
+          :currentPage="currentPage"
+          :page-size="size"
+          layout="total, prev, pager, next"
+          :total="total">
+      </el-pagination>
+    </div>
     <el-dialog :title="dialogTitle" width="30%" v-model="dialogFormVisible" center>
       <el-divider>{{ category.levelTitle }}</el-divider>
       <el-form :model="category">
@@ -102,11 +104,14 @@
     <span class="dialog-footer">
       <el-button @click="dialogFormVisible = false">取 消</el-button>
       <el-button type="primary" v-show="updateButton" @click="updateCategory">确 定</el-button>
-      <el-button type="primary" v-show="createButton" @click="createCategory">下一级</el-button>
+      <el-button type="primary" v-if="this.category.level === 1 && createButton === true"
+                 @click="createCategory">下一级</el-button>
+      <el-button type="primary" v-if="this.category.level === 2 && createButton === true"
+                 @click="createCategory">完成</el-button>
     </span>
       </template>
     </el-dialog>
-  </el-main>
+  </div>
 </template>
 
 <script>
@@ -120,11 +125,8 @@ export default {
       }, {
         value: '2',
         label: '二级类目'
-      }, {
-        value: '3',
-        label: '三级类目'
       }],
-      selectCondition: {
+      queryCondition: {
         name: '',
         value: '1',
       },
@@ -134,7 +136,7 @@ export default {
         name: '',
         level: 1,
         sort: '',
-        parentId: 0,
+        parentId: 1,
         levelTitle: ''
       },
       multipleSelection: [],
@@ -149,9 +151,10 @@ export default {
     }
   },
   mounted() {
-    this.queryList();
+    this.queryCategoryList();
   },
   methods: {
+
     handleSelectionChange(val) {
       this.multipleSelection = val;
     },
@@ -161,13 +164,14 @@ export default {
     },
     handleCurrentChange(val) {
       this.currentPage = val;
-      this.queryList();
+      this.queryCategoryList();
       console.log(`当前页: ${val}`);
     },
     handleCurrentChangeNext(val) {
       this.currentPage = val;
       console.log(`下一页: ${val}`);
     },
+
     // 下一级类目
     nextLevelCategory(index, row) {
       console.log(index)
@@ -181,8 +185,6 @@ export default {
         if (response.data.code === 200) {
           this.total = response.data.data.total;
           this.tableData = response.data.data.list;
-        } else {
-          this.$message.error('查询失败');
         }
       }).catch((error) => {
         console.log(error);
@@ -225,7 +227,7 @@ export default {
           this.category.sort = '';
         }
         this.dialogFormVisible = false;
-        this.queryList();
+        this.queryCategoryList();
       }).catch((error) => {
         console.log(error);
       })
@@ -246,13 +248,11 @@ export default {
           if (this.category.level === 2) {
             this.category.levelTitle = '二级类目';
           }
-          if (this.category.level === 3) {
-            this.category.levelTitle = '三级类目';
-          }
           this.category.parentId = response.data.data;
-          if (this.category.level === 4) {
+          if (this.category.level === 3) {
             this.dialogFormVisible = false;
-            this.queryList();
+            this.category.level = 1;
+            this.queryCategoryList();
           }
         }
       }).catch((error) => {
@@ -260,14 +260,14 @@ export default {
       })
     },
 
-    // 查询
-    queryList() {
+    // 查询类目列表
+    queryCategoryList() {
       this.$axios.get('/category/list', {
         params: {
           pageNum: this.currentPage,
           pageSize: this.size,
-          name: this.selectCondition.name,
-          level: this.selectCondition.value
+          name: this.queryCondition.name,
+          level: this.queryCondition.value
         }
       }).then((response) => {
         this.total = response.data.data.total;
@@ -277,7 +277,7 @@ export default {
       })
     },
 
-    // 删除
+    // 删除类目
     deleteCategory(index, row) {
       this.$axios.delete('/category/delete', {
         params: {
@@ -285,7 +285,7 @@ export default {
         }
       }).then((response) => {
         if (response.data.code === 200) {
-          this.queryList();
+          this.queryCategoryList();
         }
       }).catch((error) => {
         console.log(error);
@@ -296,10 +296,45 @@ export default {
 </script>
 
 <style scoped>
-.card-box {
-  background-color: #F2F4F7;
-  margin: 18px;
-  border: none;
-  border-radius: 6px;
+.main-card {
+  float: left;
+  width: 98%;
+  height: auto;
+  margin: 2% 1% 0 1%;
+  border-radius: 5px;
+  background-color: #FAFAFA;
+}
+
+.main-card-title {
+  float: left;
+  width: 96%;
+  padding: 2%;
+}
+
+.main-card-title h4 {
+  padding-left: 5px;
+  border-left: 5px solid dodgerblue;
+}
+
+.main-card-content {
+  float: left;
+  width: 30%;
+  padding-left: 3%;
+  height: auto;
+}
+
+.table-card-content {
+  width: 96%;
+  padding: 2%;
+  height: auto;
+}
+
+.pagination-card {
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  padding: 1% 2%;
+  background-color: white;
+  height: auto;
 }
 </style>

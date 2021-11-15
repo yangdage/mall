@@ -51,12 +51,6 @@ export default {
               name: '/product/category',
               icon: 'el-icon-price-tag',
               title: '类目管理',
-            },
-            {
-              submenu: 2,
-              name: '/product/brand',
-              icon: 'el-icon-price-tag',
-              title: '品牌管理',
             }
           ]
         },
@@ -74,23 +68,6 @@ export default {
               name: '/order/set',
               icon: 'el-icon-setting',
               title: '订单设置',
-            }
-          ]
-        },
-        {
-          name: '/user/manage',
-          icon: 'el-icon-user-solid',
-          title: '用户',
-          children: [
-            {
-              name: '/user/manage',
-              icon: 'el-icon-coin',
-              title: '用户列表',
-            },
-            {
-              name: '/reset/password',
-              icon: 'el-icon-lock',
-              title: '修改密码',
             }
           ]
         }

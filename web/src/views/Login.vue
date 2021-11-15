@@ -12,23 +12,28 @@
                  ref="loginForm"
                  class="demo-ruleForm">
           <el-form-item prop="username">
-            <el-input type="text" v-model="loginForm.username" autocomplete="off" prefix-icon="el-icon-user">
-            </el-input>
+            <el-input type="text"
+                      v-model="loginForm.username"
+                      autocomplete="off"
+                      prefix-icon="el-icon-user" />
           </el-form-item>
           <el-form-item prop="password">
-            <el-input type="password" v-model="loginForm.password" autocomplete="off" prefix-icon="el-icon-lock">
-            </el-input>
+            <el-input type="password"
+                      v-model="loginForm.password"
+                      autocomplete="off"
+                      prefix-icon="el-icon-lock" />
           </el-form-item>
           <el-form-item prop="captchaValue" style="width: 380px;">
-            <el-input v-model="loginForm.captchaValue" prefix-icon="el-icon-circle-check"
-                      style="width: 150px; float: left" maxlength="5"></el-input>
+            <el-input v-model="loginForm.captchaValue"
+                      prefix-icon="el-icon-circle-check"
+                      style="width: 150px; float: left" m
+                      axlength="5" />
             <el-image :src="captchaImg" class="captchaImg" @click="getCaptcha"/>
           </el-form-item>
           <el-form-item>
             <el-button type="primary"
                        :style="{ width: '100%'}"
-                       @click="submitForm('loginForm')">登 录
-            </el-button>
+                       @click="submitForm('loginForm')">登 录</el-button>
           </el-form-item>
         </el-form>
       </el-card>
@@ -84,6 +89,8 @@ export default {
     this.getCaptcha();
   },
   methods: {
+
+    // 用户登录
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
@@ -101,6 +108,8 @@ export default {
       });
       this.getCaptcha();
     },
+
+    // 获取验证码
     getCaptcha() {
       this.$axios.get('/captcha').then(response => {
         this.loginForm.captchaId = response.data.data.captchaId
