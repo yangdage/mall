@@ -30,6 +30,7 @@ mall 是一套商城系统，基于 golang、 gin、 gorm、 vue3、element plus
 | captcha | 验证码生成器 | https://github.com/mojocn/base64Captcha |
 | viper | 配置管理 | https://github.com/spf13/viper |
 | redis | 缓存 | https://github.com/go-redis/redis |
+| elasticsearch | 搜索引擎 | https://www.elastic.co/cn/elasticsearch/ |
 
 微信小程序技术：
 
@@ -46,6 +47,7 @@ mall 是一套商城系统，基于 golang、 gin、 gorm、 vue3、element plus
 | go | 1.17.x |
 | mysql | 8.0.x |
 | redis | 6.0.x |
+| elasticsearch | 7.14.x |
 | node.js | 14.13.x |
 | npm | 6.14.x |
 
