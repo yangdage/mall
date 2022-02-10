@@ -1,44 +1,40 @@
 <template>
-  <el-row>
-    <el-col :span="6" :offset="9">
-      <el-card class="box-card"
-               shadow="never"
-               style="border: none;">
-        <img src="../assets/logo.png" class="logo-img" alt="logo"/><br>
-        <p class="logo-family">Welcome To Mall</p><br>
-        <el-form :model="loginForm"
-                 status-icon
-                 :rules="rules"
-                 ref="loginForm"
-                 class="demo-ruleForm">
-          <el-form-item prop="username">
-            <el-input type="text"
-                      v-model="loginForm.username"
-                      autocomplete="off"
-                      prefix-icon="el-icon-user" />
-          </el-form-item>
-          <el-form-item prop="password">
-            <el-input type="password"
-                      v-model="loginForm.password"
-                      autocomplete="off"
-                      prefix-icon="el-icon-lock" />
-          </el-form-item>
-          <el-form-item prop="captchaValue" style="width: 380px;">
+  <div class="main">
+    <div class="form">
+      <img src="../assets/logo.png" class="logo" alt="logo"/>
+      <el-form :model="loginForm"
+               :rules="rules"
+               ref="loginForm"
+               class="demo-ruleForm" status-icon>
+        <el-form-item prop="username">
+          <el-input type="text"
+                    v-model="loginForm.username"
+                    autocomplete="off"
+                    prefix-icon="el-icon-user"/>
+        </el-form-item>
+        <el-form-item prop="password">
+          <el-input type="password"
+                    v-model="loginForm.password"
+                    autocomplete="off"
+                    prefix-icon="el-icon-lock"/>
+        </el-form-item>
+        <el-form-item prop="captchaValue">
+          <div style="display: inline-flex;">
             <el-input v-model="loginForm.captchaValue"
                       prefix-icon="el-icon-circle-check"
-                      style="width: 150px; float: left" m
-                      axlength="5" />
+                      style="width: 50%;"
+                      maxlength="5"/>
             <el-image :src="captchaImg" class="captchaImg" @click="getCaptcha"/>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary"
-                       :style="{ width: '100%'}"
-                       @click="submitForm('loginForm')">登 录</el-button>
-          </el-form-item>
-        </el-form>
-      </el-card>
-    </el-col>
-  </el-row>
+          </div>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary"
+                     class="button"
+                     @click="submitForm('loginForm')">登 录</el-button>
+        </el-form-item>
+      </el-form>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -100,10 +96,12 @@ export default {
             captchaId: this.loginForm.captchaId,
             captchaValue: this.loginForm.captchaValue,
           }).then((response) => {
-              localStorage.setItem("token", response.data.data.token)
-              localStorage.setItem("uid", response.data.data.uid)
-              this.$router.push('/home');
-          }).catch((error) => { console.log(error); })
+            localStorage.setItem("token", response.data.data.token)
+            localStorage.setItem("uid", response.data.data.uid)
+            this.$router.push('/home');
+          }).catch((error) => {
+            console.log(error);
+          })
         }
       });
       this.getCaptcha();
@@ -122,25 +120,39 @@ export default {
 </script>
 
 <style scoped>
-.logo-img {
+.main {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  background-image: url("../assets/back.jpeg");
+  background-size: 100% 60%;
+  background-repeat: no-repeat;
+  opacity: 0.8;
+  background-color: #e8ecf1;
+}
+.form {
+  width: 25%;
+  height: 55%;
+  margin: 150px auto;
+  text-align: center;
+  padding: 20px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 1px 2px 1px #F2F6FC;
+}
+.logo {
   width: 80px;
   height: 80px;
+  margin: 20px;
 }
-
-.box-card {
-  margin-top: 150px;
-  text-align: center;
-}
-
-.logo-family {
-  font-size: 16px;
-  color: #409eff;
-  font-weight: bold;
-}
-
 .captchaImg {
+  width: 45%;
+  height: 40px;
+  padding: 0 20px;
   float: left;
-  margin-left: 8px;
-  border-radius: 4px;
+}
+.button {
+  width: 100%;
+  margin-top: 5px;
 }
 </style>
