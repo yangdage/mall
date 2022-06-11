@@ -4,9 +4,7 @@ mall 是一套商城系统，基于 golang、 gin、 gorm、 vue3、element plus
 
 ### 最新版项目地址：https://github.com/zchengo/imall
 
-**更新时间：2022-02-10** 
-
-**更新内容：** 优化登录页UI
+### 本仓库停止更新！！！
 
 ### 技术选型
 
