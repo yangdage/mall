@@ -2,9 +2,10 @@
 ### 介绍
 mall 是一套商城系统，基于 golang、 gin、 gorm、 vue3、element plus、 vant weapp 开发，包括 golang服务端、 Vue后台管理员前端、微信小程序用户前端，主要功能有商品管理、订单管理、用户管理、商品浏览、收藏加购、地址管理、订单查询等。
 
-### 最新版项目地址：https://github.com/zchengo/imall
 
 ### 本仓库停止更新！！！
+
+### 最新版项目地址：https://github.com/zchengo/imall
 
 ### 技术选型
 
